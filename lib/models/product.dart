@@ -38,8 +38,12 @@ class Product {
       image: map["image"],
       createBy: map["createBy"],
       visibility: map["visibility"],
-      created: map["created"],
-      updated: map["updated"],
+      created: map["created"] != null
+          ? DateTime.parse(map["created"].toString())
+          : null,
+      updated: map["updated"] != null
+          ? DateTime.parse(map["updated"].toString())
+          : null,
     );
   }
 
@@ -61,11 +65,11 @@ class Product {
 
   @override
   String toString() {
-    return 'Product{id: $id, code: $code, name: $name, description: $description, feature: $feature, price: $price, image: $image, createBy: $createBy, visibility: $visibility, created: $created, updated: $updated, updated: $updated}';
+    return 'Product{id: $id, code: $code, name: $name, description: $description, feature: $feature, price: $price, image: $image, createBy: $createBy, visibility: $visibility, created: $created, updated: $updated}';
   }
 
   static List<Product> productFromJson(String jsonData) {
-    final data = json.decode(jsonData);
+    final data = jsonDecode(jsonData);
     return List<Product>.from(
       data["values"].map(
         (item) => Product.fromJson(item),
@@ -75,6 +79,6 @@ class Product {
 
   static String productToJson(Product data) {
     final jsonData = data.toJson();
-    return json.encode(jsonData);
+    return jsonEncode(jsonData);
   }
 }
