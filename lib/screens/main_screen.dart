@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
 import 'package:kampoeng_kepiting_mobile/screens/account_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/home_screen.dart';
-import 'package:kampoeng_kepiting_mobile/screens/product_screen.dart';
+import 'package:kampoeng_kepiting_mobile/screens/shop_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/visit_list_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/voucher_screen.dart';
 
@@ -21,8 +23,8 @@ class _MainScreenState extends State<MainScreen> {
       'title': 'Kampoeng Kepiting',
     },
     {
-      'page': ProductScreen(),
-      'title': 'Activities',
+      'page': ShopScreen(),
+      'title': 'Shoping List',
     },
     {
       'page': VisitListScreen(),
@@ -58,37 +60,40 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:
+            _selectedPageIndex == 0 ? primaryColor : primaryBackgrounColor,
+        foregroundColor:
+            _selectedPageIndex == 0 ? primaryBackgrounColor : primaryColor,
         title: Text(
           _pages[_selectedPageIndex]['title'].toString(),
+          style: TextStyle(
+            color:
+                _selectedPageIndex == 0 ? primaryBackgrounColor : primaryColor,
+          ),
         ),
       ),
-      body: Stack(
-        children: [
-          PageView(
-            controller: _pageController,
-            onPageChanged: _selectPage,
-            children: _pages.map((page) => page['page'] as Widget).toList(),
-          ),
-          _isLoading
-              ? Stack(
-                  children: <Widget>[
-                    Opacity(
-                      opacity: 0.3,
-                      child: ModalBarrier(
-                        dismissible: false,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
-        ],
-      ),
+      body: _isLoading
+          ? Stack(
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.3,
+                  child: ModalBarrier(
+                    dismissible: false,
+                    color: Colors.grey,
+                  ),
+                ),
+                Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
+            )
+          : PageView(
+              controller: _pageController,
+              onPageChanged: _selectPage,
+              children: _pages.map((page) => page['page'] as Widget).toList(),
+            ),
       bottomNavigationBar: BottomNavyBar(
         onItemSelected: (index) {
           _selectPage(index);
@@ -97,14 +102,14 @@ class _MainScreenState extends State<MainScreen> {
         selectedIndex: _selectedPageIndex,
         items: [
           BottomNavyBarItem(
-            icon: Icon(Icons.home_rounded),
+            icon: Icon(Icons.festival_rounded),
             title: Text('Home'),
             activeColor: primaryColor,
             inactiveColor: inactiveColor,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.festival_rounded),
-            title: Text('Activity'),
+            icon: Icon(Icons.shopping_basket_rounded),
+            title: Text('Shop'),
             activeColor: primaryColor,
             inactiveColor: inactiveColor,
           ),

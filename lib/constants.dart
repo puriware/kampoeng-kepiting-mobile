@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kampoeng_kepiting_mobile/models/product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Colors
 const textColor = Color(0xFF1E2432);
@@ -7,7 +8,7 @@ const primaryColor = Color(0xFF4F23BD);
 const primaryBackgrounColor = Color(0XFFEDE9F8);
 const inactiveColor = Color(0xFFCABDEB);
 
-//
+// Sizes
 const extraSmall = 2.0;
 const small = 4.0;
 const smallMedium = 6.0;
@@ -15,6 +16,10 @@ const medium = 8.0;
 const mediumLarge = 12.0;
 const large = 16.0;
 const extraLarge = 32.0;
+
+// API server URL
+final String apiUrl = dotenv.env['API_URL'].toString();
+
 
 final PRODUCTS = [
   Product(

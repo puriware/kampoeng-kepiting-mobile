@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           textTheme: TextTheme(
             headline6: TextStyle(
               color: primaryColor,
-              fontFamily: 'Anton',
+              fontFamily: 'PTSerif',
               fontSize: 22,
               //fontWeight: FontWeight.bold,
             ),
@@ -97,8 +97,8 @@ class _MyAppState extends State<MyApp> {
               ),
               headline6: TextStyle(
                 fontFamily: 'PTSans',
-                fontSize: 16,
-                //fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             )
             .apply(
