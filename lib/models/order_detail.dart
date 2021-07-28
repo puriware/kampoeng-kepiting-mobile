@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class OrderDetail {
+  int id;
   int userId;
   int orderId;
   int idProduct;
@@ -15,6 +16,7 @@ class OrderDetail {
   DateTime? updated;
 
   OrderDetail({
+    this.id = 0,
     this.userId = 0,
     required this.orderId,
     required this.idProduct,
@@ -31,6 +33,7 @@ class OrderDetail {
 
   factory OrderDetail.fromJson(Map<String, dynamic> map) {
     return OrderDetail(
+      id: map["id"],
       userId: map["userId"],
       orderId: map["orderId"],
       idProduct: map["id_product"],
@@ -52,6 +55,7 @@ class OrderDetail {
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "userId": userId,
       "orderId": orderId,
       "id_product": idProduct,
@@ -69,7 +73,7 @@ class OrderDetail {
 
   @override
   String toString() {
-    return 'OrderDetail{userId: $userId, orderId: $orderId, id_product: $idProduct, orderType: $orderType, quantity: $quantity, price: $price, visitDate: $visitDate, note: $note, voucherCode: $voucherCode, remaining: $remaining, created: $created, updated: $updated}';
+    return 'OrderDetail{id: $id, userId: $userId, orderId: $orderId, id_product: $idProduct, orderType: $orderType, quantity: $quantity, price: $price, visitDate: $visitDate, note: $note, voucherCode: $voucherCode, remaining: $remaining, created: $created, updated: $updated}';
   }
 
   static List<OrderDetail> orderDetailFromJson(String jsonData) {

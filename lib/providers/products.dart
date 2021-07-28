@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import "package:collection/collection.dart";
 import '../models/product.dart';
 import '../services/product_api.dart';
 
