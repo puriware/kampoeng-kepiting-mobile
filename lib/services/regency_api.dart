@@ -9,7 +9,7 @@ class RegencyApi {
   final String token;
   RegencyApi(this.token);
 
-  Future<List<Regency>> getRegencys() async {
+  Future<List<Regency>> getRegencies() async {
     try {
       final response = await client.get(
         Uri.http(baseUrl, '/regencies'),

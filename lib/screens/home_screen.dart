@@ -12,16 +12,22 @@ class HomeScreen extends StatelessWidget {
       children: [
         Container(color: primaryColor, child: null),
         Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(large),
+              topRight: Radius.circular(large),
+            ),
+            color: primaryBackgrounColor,
+          ),
           margin: const EdgeInsets.only(
             top: 50,
           ),
           padding: EdgeInsets.only(
-            top: 40,
+            top: 38,
             bottom: 0,
             left: large,
             right: large,
           ),
-          color: primaryBackgrounColor,
           child: GridView.builder(
             padding: EdgeInsets.symmetric(vertical: large, horizontal: 0),
             itemCount: products.length,
@@ -52,8 +58,13 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          products[i].name.toString(),
-                          style: Theme.of(context).textTheme.headline6,
+                          products[i].name.toString().length > 20
+                              ? products[i].name.toString().substring(0, 20)
+                              : products[i].name.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                         Text(
                           'Rp ${products[i].price.toString()}',

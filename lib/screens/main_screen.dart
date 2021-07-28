@@ -71,6 +71,13 @@ class _MainScreenState extends State<MainScreen> {
                 _selectedPageIndex == 0 ? primaryBackgrounColor : primaryColor,
           ),
         ),
+        actions: [
+          if (_selectedPageIndex == 2)
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.add),
+            ),
+        ],
       ),
       body: _isLoading
           ? Stack(
