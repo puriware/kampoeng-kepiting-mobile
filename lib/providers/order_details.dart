@@ -14,9 +14,14 @@ class OrderDetails with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetOrderDetails() async {
+  Future<void> fetchAndSetOrderDetails({userId}) async {
     try {
-      _orderDetails = await _orderDetailApi.getOrderDetails();
+      _orderDetails = userId != null
+          ? await _orderDetailApi.findOrderDetailBy(
+              'id_customer',
+              userId.toString(),
+            )
+          : await _orderDetailApi.getOrderDetails();
       notifyListeners();
     } catch (error) {
       throw error;

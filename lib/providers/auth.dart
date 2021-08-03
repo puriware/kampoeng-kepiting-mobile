@@ -15,7 +15,6 @@ class Auth with ChangeNotifier {
   DateTime? _expiryDate;
   Timer? _authTimer;
   UserApi? _userApi;
-  final _prefs = SharedPreferences.getInstance();
 
   bool get isAuth {
     return _token != null;
@@ -42,12 +41,23 @@ class Auth with ChangeNotifier {
       'message': 'Login Success',
     };
     try {
-      var jwt = await _attemptLogIn(email, password);
-      if (jwt != null) {
+      final String baseUrl = apiUrl;
+      final urlLogin = Uri.http(baseUrl, '/auth/login');
+      final res = await http.post(
+        urlLogin,
+        body: {
+          'email': email,
+          'password': password,
+        },
+      );
+      if (res.statusCode == 200) {
+        final body = jsonDecode(res.body);
+        final jwt = body['token'];
+        _activeUser = User.fromJson(body['values']);
         _token = jwt;
         _userApi = UserApi(_token!);
         _activeUser = await _userApi!.findUser(email);
-        var arrayToken = jwt.split(".");
+        var arrayToken = jwt.split('.');
         if (arrayToken.length == 3) {
           var payload = jsonDecode(
             ascii.decode(
@@ -59,7 +69,7 @@ class Auth with ChangeNotifier {
             ),
           );
           _expiryDate =
-              DateTime.fromMillisecondsSinceEpoch(payload["exp"] * 1000);
+              DateTime.fromMillisecondsSinceEpoch(payload['exp'] * 1000);
           _autoLogout();
           notifyListeners();
           final userData = jsonEncode({
@@ -67,11 +77,11 @@ class Auth with ChangeNotifier {
             'email': email,
             'expiryDate': _expiryDate!.toIso8601String(),
           });
-          final prefs = await _prefs;
+          final prefs = await SharedPreferences.getInstance();
           await prefs.setString('userData', userData);
         }
       } else {
-        print("No account was found matching that email and password");
+        //print('No account was found matching that email and password');
         result = {
           'status': 'failed',
           'message': 'No account was found matching that email and password'
@@ -83,23 +93,8 @@ class Auth with ChangeNotifier {
     return jsonEncode(result);
   }
 
-  Future<String?> _attemptLogIn(String email, String password) async {
-    final String baseUrl = apiUrl;
-    final url = Uri.http(baseUrl, "/auth/login");
-    try {
-      var res = await http.post(url, body: {
-        "email": email,
-        "password": password,
-      });
-      if (res.statusCode == 200) return jsonDecode(res.body)['token'];
-    } catch (error) {
-      throw error;
-    }
-    return null;
-  }
-
   Future<bool> autoLogin() async {
-    final prefs = await _prefs;
+    final prefs = await SharedPreferences.getInstance();
     var userData = prefs.getString('userData');
     if (userData == null) {
       return false;
@@ -133,7 +128,7 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
     notifyListeners();
-    final prefs = await _prefs;
+    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('userData');
   }
 

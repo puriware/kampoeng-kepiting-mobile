@@ -1,13 +1,24 @@
-import 'dart:io';
-
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
+import 'package:kampoeng_kepiting_mobile/models/visit.dart';
+import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
+import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
+import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
+import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
+import 'package:kampoeng_kepiting_mobile/providers/products.dart';
+import 'package:kampoeng_kepiting_mobile/providers/redeems.dart';
+import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
 import 'package:kampoeng_kepiting_mobile/screens/account_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/home_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/shop_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/visit_list_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/voucher_screen.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/visit_entry_modal.dart';
+import 'package:nanoid/nanoid.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -42,7 +53,57 @@ class _MainScreenState extends State<MainScreen> {
 
   PageController _pageController = PageController();
   int _selectedPageIndex = 0;
-  bool _isLoading = false;
+  var _isInit = true;
+  var _isLoading = false;
+  int? _userID;
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (_isInit == true) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
+        await Provider.of<Products>(
+          context,
+          listen: false,
+        ).fetchAndSetProducts();
+        await Provider.of<PriceLists>(
+          context,
+          listen: false,
+        ).fetchAndSetPriceLists();
+        await Provider.of<Orders>(
+          context,
+          listen: false,
+        ).fetchAndSetOrders(userId: _userID);
+        await Provider.of<OrderDetails>(
+          context,
+          listen: false,
+        ).fetchAndSetOrderDetails(userId: _userID);
+        await Provider.of<Redeems>(
+          context,
+          listen: false,
+        ).fetchAndSetRedeems();
+        await Provider.of<Visits>(
+          context,
+          listen: false,
+        ).fetchAndSetVisits(userId: _userID);
+        _isInit = false;
+      } catch (error) {
+        MessageDialog.showPopUpMessage(
+          context,
+          "Error Loading Data",
+          error.toString(),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -54,6 +115,56 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void _saveVisit(
+    String region,
+    String province,
+    String regency,
+    String district,
+  ) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      if (region.isNotEmpty) {
+        final newVisit = Visit(
+          visitor: _userID!,
+          region: region,
+          visitCode: '${_userID!}#${nanoid()}',
+          province: province,
+          regency: regency,
+          district: district,
+        );
+
+        final result = await Provider.of<Visits>(
+          context,
+          listen: false,
+        ).addVisit(newVisit);
+
+        MessageDialog.showPopUpMessage(context, 'Add visit result', result);
+        setState(() {
+          _isLoading = false;
+        });
+        //Navigator.of(context).pop();
+      } else {
+        MessageDialog.showPopUpMessage(
+          context,
+          'Region is empty',
+          'Please insert your origin region',
+        );
+      }
+    } catch (error) {
+      MessageDialog.showPopUpMessage(
+        context,
+        "Error",
+        error.toString(),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -74,7 +185,31 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           if (_selectedPageIndex == 2)
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(large),
+                      topRight: Radius.circular(large),
+                    ),
+                  ),
+                  context: context,
+                  builder: (_) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(large),
+                        topRight: Radius.circular(large),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: VisiEntryModal(_saveVisit),
+                        behavior: HitTestBehavior.opaque,
+                      ),
+                    );
+                  },
+                );
+              },
               icon: Icon(Icons.add),
             ),
         ],

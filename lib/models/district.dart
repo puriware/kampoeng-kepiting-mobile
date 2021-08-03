@@ -3,7 +3,7 @@ import 'dart:convert';
 class District {
   String id;
   String regencyId;
-  int name;
+  String name;
 
   District({
     required this.id,

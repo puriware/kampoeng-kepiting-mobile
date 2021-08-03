@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class Province {
   String id;
-  int name;
+  String name;
 
   Province({
     required this.id,

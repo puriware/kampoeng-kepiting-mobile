@@ -30,7 +30,7 @@ class VisitApi {
     }
   }
 
-  Future<List<Visit>> findVisit(String id) async {
+  Future<List<Visit>> findVisit(int id) async {
     try {
       final response = await client.get(
         Uri.http(baseUrl, '/visits/$id'),

@@ -1,12 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:kampoeng_kepiting_mobile/models/product.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Colors
-const textColor = Color(0xFF1E2432);
-const primaryColor = Color(0xFF4F23BD);
+const textColor = Color(0xFF343A40);
+const primaryColor = Color(0xFF7952B3);
+const primaryDarkerColor = Color(0xFF512D6D);
+const accentColor = Color(0xFFFFC107);
 const primaryBackgrounColor = Color(0XFFEDE9F8);
+const whiteBackgrounColor = Color(0XFFEEEEEE);
 const inactiveColor = Color(0xFFCABDEB);
+const dangerColor = Color(0xFFF8485E);
+const acceptColor = Color(0xFF00C1D4);
 
 // Sizes
 const extraSmall = 2.0;
@@ -19,8 +25,9 @@ const extraLarge = 32.0;
 
 // API server URL
 final String apiUrl = dotenv.env['API_URL'].toString();
+final currency = NumberFormat.simpleCurrency(locale: 'id_ID');
 
-final PRODUCTS = [
+final dataProducts = [
   Product(
     code: 'P001',
     name: 'Tour Canoing',

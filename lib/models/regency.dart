@@ -3,7 +3,7 @@ import 'dart:convert';
 class Regency {
   String id;
   String provinceId;
-  int name;
+  String name;
 
   Regency({
     required this.id,

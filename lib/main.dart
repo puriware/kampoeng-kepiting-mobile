@@ -2,10 +2,27 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
+import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
+import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
+import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
+import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
+import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
+import 'package:kampoeng_kepiting_mobile/providers/products.dart';
+import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
+import 'package:kampoeng_kepiting_mobile/providers/redeems.dart';
+import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
+import 'package:kampoeng_kepiting_mobile/providers/users.dart';
+import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
+import 'package:kampoeng_kepiting_mobile/screens/auth_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/main_screen.dart';
+import 'package:kampoeng_kepiting_mobile/screens/splash_screen.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visit_entry_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -58,54 +75,193 @@ class _MyAppState extends State<MyApp> {
       ),
     );
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Kampoeng Kepiting',
-      theme: ThemeData(
-        primarySwatch: generateMaterialColor(primaryColor),
-        accentColor: Colors.amberAccent,
-        fontFamily: 'PTSans',
-        scaffoldBackgroundColor: primaryBackgrounColor,
-        appBarTheme: AppBarTheme.of(context).copyWith(
-          backgroundColor: primaryBackgrounColor,
-          centerTitle: true,
-          elevation: 0,
-          foregroundColor: primaryColor,
-          iconTheme: IconThemeData(color: primaryColor),
-          textTheme: TextTheme(
-            headline6: TextStyle(
-              color: primaryColor,
-              fontFamily: 'PTSerif',
-              fontSize: 22,
-              //fontWeight: FontWeight.bold,
-            ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Users>(
+          create: (_) => Users([]),
+          update: (
+            ctx,
+            auth,
+            prevUsers,
+          ) =>
+              Users(
+            prevUsers == null ? [] : prevUsers.users,
+            token: auth.token,
           ),
         ),
-        // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        //   //selectedIconTheme: IconThemeData(color: kPrimaryColor),
-        //   //backgroundColor: Colors.purple,
-        //   //selectedItemColor: kPrimaryColor,
-        // ),
-        textTheme: ThemeData.light()
-            .textTheme
-            .copyWith(
-              bodyText1: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: (_) => Products([]),
+          update: (
+            ctx,
+            auth,
+            prevProducts,
+          ) =>
+              Products(
+            prevProducts == null ? [] : prevProducts.products,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (_) => Orders([]),
+          update: (
+            ctx,
+            auth,
+            prevOrders,
+          ) =>
+              Orders(
+            prevOrders == null ? [] : prevOrders.orders,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, OrderDetails>(
+          create: (_) => OrderDetails([]),
+          update: (
+            ctx,
+            auth,
+            prevOrderDetails,
+          ) =>
+              OrderDetails(
+            prevOrderDetails == null ? [] : prevOrderDetails.orderDetails,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Redeems>(
+          create: (_) => Redeems([]),
+          update: (
+            ctx,
+            auth,
+            prevRedeems,
+          ) =>
+              Redeems(
+            prevRedeems == null ? [] : prevRedeems.redeems,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Visits>(
+          create: (_) => Visits([]),
+          update: (
+            ctx,
+            auth,
+            prevVisits,
+          ) =>
+              Visits(
+            prevVisits == null ? [] : prevVisits.visits,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, PriceLists>(
+          create: (_) => PriceLists([]),
+          update: (
+            ctx,
+            auth,
+            prevPriceLists,
+          ) =>
+              PriceLists(
+            prevPriceLists == null ? [] : prevPriceLists.priceLists,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Provinces>(
+          create: (_) => Provinces([]),
+          update: (
+            ctx,
+            auth,
+            prevProvinces,
+          ) =>
+              Provinces(
+            prevProvinces == null ? [] : prevProvinces.provinces,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Regencies>(
+          create: (_) => Regencies([]),
+          update: (
+            ctx,
+            auth,
+            prevRegencies,
+          ) =>
+              Regencies(
+            prevRegencies == null ? [] : prevRegencies.regencies,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Districts>(
+          create: (_) => Districts([]),
+          update: (
+            ctx,
+            auth,
+            prevDistricts,
+          ) =>
+              Districts(
+            prevDistricts == null ? [] : prevDistricts.districts,
+            token: auth.token,
+          ),
+        ),
+      ],
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Kampoeng Kepiting',
+          theme: ThemeData(
+            primarySwatch: generateMaterialColor(primaryColor),
+            accentColor: Colors.amberAccent,
+            fontFamily: 'PTSans',
+            scaffoldBackgroundColor: primaryBackgrounColor,
+            appBarTheme: AppBarTheme.of(context).copyWith(
+              backgroundColor: primaryBackgrounColor,
+              centerTitle: true,
+              elevation: 0,
+              foregroundColor: primaryColor,
+              iconTheme: IconThemeData(color: primaryColor),
+              textTheme: TextTheme(
+                headline6: TextStyle(
+                  color: primaryColor,
+                  fontFamily: 'PTSerif',
+                  fontSize: 22,
+                  //fontWeight: FontWeight.bold,
+                ),
               ),
-              bodyText2: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              headline6: TextStyle(
-                fontFamily: 'PTSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-            .apply(
-              displayColor: textColor,
             ),
+            textTheme: ThemeData.light()
+                .textTheme
+                .copyWith(
+                  bodyText1: TextStyle(
+                    color: Color.fromRGBO(20, 51, 51, 1),
+                  ),
+                  bodyText2: TextStyle(
+                    color: Color.fromRGBO(20, 51, 51, 1),
+                  ),
+                  headline6: TextStyle(
+                    fontFamily: 'PTSans',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                .apply(
+                  displayColor: textColor,
+                ),
+          ),
+          home: auth.isAuth
+              ? MainScreen()
+              : FutureBuilder(
+                  future: auth.autoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
+          routes: {
+            VisitEntryScreen.routeName: (ctx) => VisitEntryScreen(),
+          },
+          onUnknownRoute: (settings) => MaterialPageRoute(
+            builder: (ctx) => MainScreen(),
+          ),
+        ),
       ),
-      home: MainScreen(),
     );
   }
 }

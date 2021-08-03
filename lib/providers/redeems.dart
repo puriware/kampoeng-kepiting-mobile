@@ -14,9 +14,14 @@ class Redeems with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetRedeems() async {
+  Future<void> fetchAndSetRedeems({userId}) async {
     try {
-      _redeems = await _redeemApi.getRedeems();
+      _redeems = userId != null
+          ? await _redeemApi.findRedeemBy(
+              'id_customer',
+              userId.toString(),
+            )
+          : await _redeemApi.getRedeems();
       notifyListeners();
     } catch (error) {
       throw error;

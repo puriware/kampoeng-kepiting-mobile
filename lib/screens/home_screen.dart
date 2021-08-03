@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = PRODUCTS;
+    final products = dataProducts;
     return Stack(
       children: [
         Container(color: primaryColor, child: null),
@@ -57,21 +57,32 @@ class HomeScreen extends StatelessWidget {
                             fit: BoxFit.fill,
                           ),
                         ),
-                        Text(
-                          products[i].name.toString().length > 20
-                              ? products[i].name.toString().substring(0, 20)
-                              : products[i].name.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Container(
+                          padding: EdgeInsets.all(small),
+                          child: Column(
+                            children: [
+                              Text(
+                                products[i].name.toString().length > 20
+                                    ? products[i]
+                                        .name
+                                        .toString()
+                                        .substring(0, 20)
+                                    : products[i].name.toString(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                currency.format(
+                                  double.parse(
+                                    products[i].price.toString(),
+                                  ),
+                                ),
+                                style: TextStyle(color: primaryColor),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          'Rp ${products[i].price.toString()}',
-                          style: TextStyle(color: primaryColor),
-                        ),
-                        SizedBox(
-                          height: small,
                         ),
                       ],
                     ),
@@ -86,7 +97,8 @@ class HomeScreen extends StatelessWidget {
           child: Card(
             elevation: medium,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(large)),
+              borderRadius: BorderRadius.circular(large),
+            ),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: primaryBackgrounColor,

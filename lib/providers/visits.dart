@@ -14,9 +14,14 @@ class Visits with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetVisits() async {
+  Future<void> fetchAndSetVisits({userId}) async {
     try {
-      _visits = await _visitApi.getVisits();
+      _visits = userId != null
+          ? await _visitApi.findVisitBy(
+              'visitor',
+              userId.toString(),
+            )
+          : await _visitApi.getVisits();
       notifyListeners();
     } catch (error) {
       throw error;
@@ -36,13 +41,22 @@ class Visits with ChangeNotifier {
     return result;
   }
 
+  Future<Visit?> getVisitByIdFromServer(
+    int id,
+  ) async {
+    final result = await _visitApi.findVisit(id);
+
+    return result.isNotEmpty ? result[0] : null;
+  }
+
   Future<String> addVisit(Visit data) async {
     var result = "Submit new data is success";
     try {
       final newID = await _visitApi.createVisit(data);
       if (newID != null) {
-        data.id = int.parse(newID);
-        _visits.insert(0, data);
+        final id = int.parse(newID);
+        final result = await getVisitByIdFromServer(id);
+        if (result != null) _visits.insert(0, result);
         notifyListeners();
       }
     } catch (error) {
