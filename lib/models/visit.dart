@@ -9,7 +9,7 @@ class Visit {
   String region;
   String visitCode;
   int? officer;
-  String? visitTime;
+  DateTime? visitTime;
   DateTime? created;
   DateTime? updated;
 
@@ -37,7 +37,9 @@ class Visit {
       region: map["region"],
       visitCode: map["visitCode"],
       officer: map["officer"],
-      visitTime: map["visitTime"].toString(),
+      visitTime: map["visitTime"] != null
+          ? DateTime.parse(map["visitTime"].toString())
+          : null,
       created: map["created"] != null
           ? DateTime.parse(map["created"].toString())
           : null,
@@ -57,9 +59,13 @@ class Visit {
       "region": region,
       "visitCode": visitCode,
       "officer": officer,
-      "visitTime": visitTime,
-      "created": created,
-      "updated": updated,
+      "visitTime": visitTime != null ? visitTime!.toIso8601String() : null,
+      "created": created != null
+          ? created!.toIso8601String()
+          : DateTime.now().toIso8601String(),
+      "updated": updated != null
+          ? updated!.toIso8601String()
+          : DateTime.now().toIso8601String(),
     };
   }
 

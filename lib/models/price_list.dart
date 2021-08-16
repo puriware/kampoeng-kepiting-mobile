@@ -22,12 +22,18 @@ class PriceList {
       id: map["id"],
       idProduct: map["id_product"],
       orderType: map["orderType"],
-      price: map["price"],
+      price: double.parse(
+        map["price"].toString(),
+      ),
       created: map["created"] != null
-          ? DateTime.parse(map["created"].toString())
+          ? DateTime.parse(
+              map["created"].toString(),
+            )
           : null,
       updated: map["updated"] != null
-          ? DateTime.parse(map["updated"].toString())
+          ? DateTime.parse(
+              map["updated"].toString(),
+            )
           : null,
     );
   }

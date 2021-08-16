@@ -8,6 +8,7 @@ class User {
   String phone;
   String password;
   String level;
+  String picture;
   DateTime? created;
   DateTime? updated;
 
@@ -19,6 +20,7 @@ class User {
     required this.phone,
     required this.password,
     required this.level,
+    this.picture = '',
     this.created,
     this.updated,
   });
@@ -32,6 +34,7 @@ class User {
       phone: map["phone"],
       password: map["password"],
       level: map["level"],
+      picture: map["picture"],
       created: map["created"] != null
           ? DateTime.parse(map["created"].toString())
           : null,

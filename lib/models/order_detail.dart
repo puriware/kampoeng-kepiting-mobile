@@ -3,7 +3,7 @@ import 'dart:convert';
 class OrderDetail {
   int id;
   int userId;
-  int orderId;
+  int? orderId;
   int idProduct;
   String orderType;
   int quantity;
@@ -17,8 +17,8 @@ class OrderDetail {
 
   OrderDetail({
     this.id = 0,
-    this.userId = 0,
-    required this.orderId,
+    required this.userId,
+    this.orderId,
     required this.idProduct,
     required this.orderType,
     required this.quantity,
@@ -26,7 +26,7 @@ class OrderDetail {
     this.visitDate,
     this.note,
     this.voucherCode,
-    required this.remaining,
+    this.remaining = 0,
     this.created,
     this.updated,
   });
@@ -39,7 +39,7 @@ class OrderDetail {
       idProduct: map["id_product"],
       orderType: map["orderType"],
       quantity: map["quantity"],
-      price: map["price"],
+      price: double.parse(map["price"].toString()),
       visitDate: map["visitDate"],
       note: map["note"],
       voucherCode: map["voucherCode"],

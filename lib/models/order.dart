@@ -30,9 +30,9 @@ class Order {
       id: map["id"],
       bookingCode: map["bookingCode"],
       idCustomer: map["id_customer"],
-      total: map["total"],
-      disc: map["disc"],
-      grandTotal: map["grandTotal"],
+      total: double.parse(map["total"].toString()),
+      disc: double.parse(map["disc"].toString()),
+      grandTotal: double.parse(map["grandTotal"].toString()),
       status: map["status"],
       verifiedBy: map["verifiedBy"],
       created: map["created"] != null

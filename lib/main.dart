@@ -3,22 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
-import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
-import 'package:kampoeng_kepiting_mobile/providers/products.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
-import 'package:kampoeng_kepiting_mobile/providers/redeems.dart';
-import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
-import 'package:kampoeng_kepiting_mobile/providers/users.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
-import 'package:kampoeng_kepiting_mobile/screens/auth_screen.dart';
-import 'package:kampoeng_kepiting_mobile/screens/main_screen.dart';
-import 'package:kampoeng_kepiting_mobile/screens/splash_screen.dart';
-import 'package:kampoeng_kepiting_mobile/screens/visit_entry_screen.dart';
+import './constants.dart';
+import './providers/auth.dart';
+import './providers/cart.dart';
+import './providers/districts.dart';
+import './providers/order_details.dart';
+import './providers/orders.dart';
+import './providers/price_lists.dart';
+import './providers/products.dart';
+import './providers/provinces.dart';
+import './providers/redeems.dart';
+import './providers/regencies.dart';
+import './providers/users.dart';
+import './providers/visits.dart';
+import './screens/auth_screen.dart';
+import './screens/main_screen.dart';
+import './screens/officer/officer_main_screen.dart';
+import './screens/product_detail_screen.dart';
+import './screens/splash_screen.dart';
+import './screens/visit_entry_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -125,6 +128,18 @@ class _MyAppState extends State<MyApp> {
           ) =>
               OrderDetails(
             prevOrderDetails == null ? [] : prevOrderDetails.orderDetails,
+            token: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, Cart>(
+          create: (_) => Cart([]),
+          update: (
+            ctx,
+            auth,
+            prevCart,
+          ) =>
+              Cart(
+            prevCart == null ? [] : prevCart.items,
             token: auth.token,
           ),
         ),
@@ -245,7 +260,10 @@ class _MyAppState extends State<MyApp> {
                 ),
           ),
           home: auth.isAuth
-              ? MainScreen()
+              ? (auth.activeUser!.level.contains('Admin') ||
+                      auth.activeUser!.level.contains('Officer')
+                  ? OfficerMainScreen()
+                  : MainScreen())
               : FutureBuilder(
                   future: auth.autoLogin(),
                   builder: (ctx, authResultSnapshot) =>
@@ -256,6 +274,7 @@ class _MyAppState extends State<MyApp> {
                 ),
           routes: {
             VisitEntryScreen.routeName: (ctx) => VisitEntryScreen(),
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           },
           onUnknownRoute: (settings) => MaterialPageRoute(
             builder: (ctx) => MainScreen(),

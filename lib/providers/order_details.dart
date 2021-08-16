@@ -18,7 +18,7 @@ class OrderDetails with ChangeNotifier {
     try {
       _orderDetails = userId != null
           ? await _orderDetailApi.findOrderDetailBy(
-              'id_customer',
+              'userId',
               userId.toString(),
             )
           : await _orderDetailApi.getOrderDetails();
@@ -30,6 +30,16 @@ class OrderDetails with ChangeNotifier {
 
   List<OrderDetail> get orderDetails {
     return [..._orderDetails];
+  }
+
+  List<OrderDetail>? get availableVoucher {
+    return _orderDetails
+        .where((order) => order.voucherCode != null && order.remaining > 0)
+        .toList();
+  }
+
+  List<OrderDetail>? get voucherIssued {
+    return _orderDetails.where((order) => order.voucherCode != null).toList();
   }
 
   OrderDetail? getOrderDetailById(

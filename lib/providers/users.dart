@@ -30,9 +30,7 @@ class Users with ChangeNotifier {
   User? getUserById(
     int id,
   ) {
-    final result = _users.firstWhere(
-      (user) => user.id == id,
-    );
+    User? result = _users.firstWhere((user) => user.id == id);
     return result;
   }
 

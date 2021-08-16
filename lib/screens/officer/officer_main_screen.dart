@@ -2,44 +2,38 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
-import '../../providers/auth.dart';
 import '../../providers/order_details.dart';
-import '../../providers/orders.dart';
 import '../../providers/price_lists.dart';
 import '../../providers/products.dart';
 import '../../providers/redeems.dart';
+import '../../providers/visits.dart';
 import '../../screens/account_screen.dart';
-import '../../screens/home_screen.dart';
-import '../../screens/shop_screen.dart';
-import '../../screens/visit_list_screen.dart';
-import '../../screens/voucher_list_screen.dart';
+import '../../screens/officer/officer_home_screen.dart';
+import '../../screens/officer/redeem_screen.dart';
+import '../../screens/officer/visitor_screen.dart';
 import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class OfficerMainScreen extends StatefulWidget {
+  const OfficerMainScreen({Key? key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _OfficerMainScreenState createState() => _OfficerMainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _OfficerMainScreenState extends State<OfficerMainScreen> {
   final List<Map<String, Object>> _pages = [
     {
-      'page': HomeScreen(),
+      'page': OfficerHomeScreen(),
       'title': 'Kampoeng Kepiting',
     },
     {
-      'page': ShopScreen(),
-      'title': 'Shoping List',
+      'page': VisitorScreen(),
+      'title': 'Visitor List',
     },
     {
-      'page': VisitListScreen(),
-      'title': 'Visit List',
-    },
-    {
-      'page': VoucherListScreen(),
-      'title': 'Voucher List',
+      'page': RedeemScreen(),
+      'title': 'Redeem Voucher',
     },
     {
       'page': AccountScreen(),
@@ -51,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedPageIndex = 0;
   var _isInit = true;
   var _isLoading = false;
-  int? _userID;
 
   @override
   void didChangeDependencies() async {
@@ -61,7 +54,6 @@ class _MainScreenState extends State<MainScreen> {
         _isLoading = true;
       });
       try {
-        _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
         await Provider.of<Products>(
           context,
           listen: false,
@@ -70,18 +62,18 @@ class _MainScreenState extends State<MainScreen> {
           context,
           listen: false,
         ).fetchAndSetPriceLists();
-        await Provider.of<Orders>(
-          context,
-          listen: false,
-        ).fetchAndSetOrders(userId: _userID);
         await Provider.of<OrderDetails>(
           context,
           listen: false,
-        ).fetchAndSetOrderDetails(userId: _userID);
+        ).fetchAndSetOrderDetails();
         await Provider.of<Redeems>(
           context,
           listen: false,
         ).fetchAndSetRedeems();
+        await Provider.of<Visits>(
+          context,
+          listen: false,
+        ).fetchAndSetVisits();
         _isInit = false;
       } catch (error) {
         MessageDialog.showPopUpMessage(
@@ -148,20 +140,14 @@ class _MainScreenState extends State<MainScreen> {
             inactiveColor: inactiveColor,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.shopping_basket_rounded),
-            title: Text('Shop'),
-            activeColor: primaryColor,
-            inactiveColor: inactiveColor,
-          ),
-          BottomNavyBarItem(
             icon: Icon(Icons.person_pin_circle_rounded),
-            title: Text('Visit'),
+            title: Text('Visitor'),
             activeColor: primaryColor,
             inactiveColor: inactiveColor,
           ),
           BottomNavyBarItem(
             icon: Icon(Icons.local_activity_rounded),
-            title: Text('Voucher'),
+            title: Text('Redeem'),
             activeColor: primaryColor,
             inactiveColor: inactiveColor,
           ),

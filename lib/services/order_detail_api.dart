@@ -51,6 +51,27 @@ class OrderDetailApi {
     }
   }
 
+  Future<List<OrderDetail>> getOrderCart(int id) async {
+    try {
+      final response = await client.get(
+        Uri.http(baseUrl, '/order-details/cart/$id'),
+        headers: {'token': token},
+      );
+      if (response.statusCode == 200) {
+        Map data = json.decode(response.body);
+        return List<OrderDetail>.from(
+          data['values'].map(
+            (item) => OrderDetail.fromJson(item),
+          ),
+        );
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<List<OrderDetail>> findOrderDetailBy(String key, String value) async {
     try {
       final response = await client.get(

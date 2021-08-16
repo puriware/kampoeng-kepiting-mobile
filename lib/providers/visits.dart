@@ -14,14 +14,21 @@ class Visits with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetVisits({userId}) async {
+  Future<void> fetchAndSetVisits({int? userId, int? officerId}) async {
     try {
-      _visits = userId != null
-          ? await _visitApi.findVisitBy(
-              'visitor',
-              userId.toString(),
-            )
-          : await _visitApi.getVisits();
+      if (userId != null) {
+        _visits = await _visitApi.findVisitBy(
+          'visitor',
+          userId.toString(),
+        );
+      } else if (officerId != null) {
+        _visits = await _visitApi.findVisitBy(
+          'officer',
+          officerId.toString(),
+        );
+      } else {
+        _visits = await _visitApi.getVisits();
+      }
       notifyListeners();
     } catch (error) {
       throw error;

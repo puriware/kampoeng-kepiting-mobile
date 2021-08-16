@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/visit.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
-import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import '../../constants.dart';
+import '../../models/visit.dart';
+import '../../providers/auth.dart';
+import '../../providers/districts.dart';
+import '../../providers/provinces.dart';
+import '../../providers/regencies.dart';
+import '../../providers/visits.dart';
+import '../../widgets/message_dialog.dart';
 import 'package:nanoid/async.dart';
 import 'package:provider/provider.dart';
 
@@ -317,8 +317,7 @@ class _VisitEntryScreenState extends State<VisitEntryScreen> {
                         //enabled: false,
                       ),
                       controller: _crtlRegion,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
+                      keyboardType: TextInputType.streetAddress,
                       onFieldSubmitted: (_) {
                         _saveVisit();
                       },

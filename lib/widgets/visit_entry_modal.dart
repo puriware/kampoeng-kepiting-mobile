@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/visit.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
-import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
-import 'package:nanoid/async.dart';
+import '../../constants.dart';
+import '../../providers/districts.dart';
+import '../../providers/provinces.dart';
+import '../../providers/regencies.dart';
+import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 class VisiEntryModal extends StatefulWidget {
@@ -28,7 +24,7 @@ class _VisiEntryModalState extends State<VisiEntryModal> {
   TextEditingController _crtlRegion = TextEditingController();
   var _isInit = true;
   var _isLoading = false;
-  int? _userID;
+  var _isWarning = false;
 
   @override
   void didChangeDependencies() async {
@@ -37,14 +33,6 @@ class _VisiEntryModalState extends State<VisiEntryModal> {
         _isLoading = true;
       });
       try {
-        _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
-        await Provider.of<Provinces>(context, listen: false)
-            .fetchAndSetProvinces();
-        await Provider.of<Regencies>(context, listen: false)
-            .fetchAndSetRegencies();
-        await Provider.of<Districts>(context, listen: false)
-            .fetchAndSetDistricts();
-
         final dataProvinces =
             Provider.of<Provinces>(context, listen: false).provinces;
 
@@ -182,53 +170,30 @@ class _VisiEntryModalState extends State<VisiEntryModal> {
     }
   }
 
-  void _saveVisit() async {
+  void _savingVisit() {
     setState(() {
-      _isLoading = true;
+      _isWarning = false;
     });
-    try {
-      if (_crtlRegion.text.isNotEmpty) {
-        final newVisit = Visit(
-          visitor: _userID!,
-          region: _crtlRegion.text,
-          visitCode: '${_userID!}#${await nanoid()}',
-          province:
-              _dropDownProviceValue != '00' ? _dropDownProviceValue : null,
-          regency:
-              _dropDownRegencyValue != '0000' ? _dropDownRegencyValue : null,
-          district: _dropDownDistrictValue != '0000000'
-              ? _dropDownDistrictValue
-              : null,
-        );
-        print(newVisit);
 
-        final result = await Provider.of<Visits>(
-          context,
-          listen: false,
-        ).addVisit(newVisit);
+    if (_crtlRegion.text.isNotEmpty) {
+      final region = _crtlRegion.text;
+      final province =
+          _dropDownProviceValue != '00' ? _dropDownProviceValue : null;
+      final regency =
+          _dropDownRegencyValue != '0000' ? _dropDownRegencyValue : null;
+      final district =
+          _dropDownDistrictValue != '0000000' ? _dropDownDistrictValue : null;
 
-        await MessageDialog.showPopUpMessage(
-            context, 'Add visit result', result);
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
-      } else {
-        MessageDialog.showPopUpMessage(
-          context,
-          'Region is empty',
-          'Please insert your origin region',
-        );
-      }
-    } catch (error) {
-      MessageDialog.showPopUpMessage(
-        context,
-        "Error",
-        error.toString(),
+      widget.saveVisit(
+        region,
+        province,
+        regency,
+        district,
       );
-    } finally {
+      Navigator.of(context).pop();
+    } else {
       setState(() {
-        _isLoading = false;
+        _isWarning = true;
       });
     }
   }
@@ -341,6 +306,9 @@ class _VisiEntryModalState extends State<VisiEntryModal> {
                           labelText: 'Region',
                           border: OutlineInputBorder(),
                           prefixIcon: Icon(Icons.house_rounded),
+                          errorText: _isWarning
+                              ? 'Please insert your origin region'
+                              : null,
                         ),
                         controller: _crtlRegion,
                         keyboardType: TextInputType.multiline,
@@ -352,7 +320,7 @@ class _VisiEntryModalState extends State<VisiEntryModal> {
                       Container(
                         height: 64,
                         child: ElevatedButton.icon(
-                          onPressed: _saveVisit,
+                          onPressed: _savingVisit,
                           icon: Icon(Icons.save_rounded),
                           label: Text('Save'),
                         ),
