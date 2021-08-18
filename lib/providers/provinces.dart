@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/province.dart';
 import '../services/province_api.dart';
 
@@ -30,7 +31,7 @@ class Provinces with ChangeNotifier {
   Province? getProvinceById(
     String id,
   ) {
-    final result = _provinces.firstWhere(
+    final result = _provinces.firstWhereOrNull(
       (province) => province.id == id,
     );
     return result;

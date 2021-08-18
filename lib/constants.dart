@@ -23,9 +23,14 @@ const mediumLarge = 12.0;
 const large = 16.0;
 const extraLarge = 32.0;
 
+// APP Data
+final String appName = 'Kampoeng Kepiting';
+
 // API server URL
 final String apiUrl = dotenv.env['API_URL'].toString();
 final String imageUrl = dotenv.env['IMAGE_URL'].toString();
+
+// STANDARD
 final currency = NumberFormat.simpleCurrency(locale: 'id_ID');
 
 final dataProducts = [

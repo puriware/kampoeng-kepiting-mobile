@@ -219,7 +219,7 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Kampoeng Kepiting',
+          title: appName,
           theme: ThemeData(
             primarySwatch: generateMaterialColor(primaryColor),
             accentColor: Colors.amberAccent,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/redeem.dart';
 import '../services/redeem_api.dart';
 
@@ -14,12 +15,12 @@ class Redeems with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetRedeems({userId}) async {
+  Future<void> fetchAndSetRedeems({int? officerId}) async {
     try {
-      _redeems = userId != null
+      _redeems = officerId != null
           ? await _redeemApi.findRedeemBy(
-              'id_customer',
-              userId.toString(),
+              'officer',
+              officerId.toString(),
             )
           : await _redeemApi.getRedeems();
       notifyListeners();
@@ -32,10 +33,26 @@ class Redeems with ChangeNotifier {
     return [..._redeems];
   }
 
+  List<Redeem> getTodaysRedeem({
+    int? userId,
+    int? officerId,
+  }) {
+    final now = DateTime.now();
+    return _redeems
+        .where(
+          (rdm) =>
+              rdm.created != null &&
+              rdm.created!.year == now.year &&
+              rdm.created!.month == now.month &&
+              rdm.created!.day == now.day,
+        )
+        .toList();
+  }
+
   Redeem? getRedeemById(
     int id,
   ) {
-    final result = _redeems.firstWhere(
+    final result = _redeems.firstWhereOrNull(
       (redeem) => redeem.id == id,
     );
     return result;

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/user.dart';
 import '../services/user_api.dart';
 
@@ -30,7 +31,7 @@ class Users with ChangeNotifier {
   User? getUserById(
     int id,
   ) {
-    User? result = _users.firstWhere((user) => user.id == id);
+    User? result = _users.firstWhereOrNull((user) => user.id == id);
     return result;
   }
 

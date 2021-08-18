@@ -43,55 +43,61 @@ class AuthScreen extends StatelessWidget {
                 ),
               ],
             ),
+            // orientation == Orientation.portrait
+            //     ? SingleChildScrollView(
+            //         child: Container(
+            //           margin: EdgeInsets.only(top: 100),
+            //           height: deviceSize.height,
+            //           width: deviceSize.width,
+            //           child: Column(
+            //             mainAxisAlignment: MainAxisAlignment.start,
+            //             crossAxisAlignment: CrossAxisAlignment.center,
+            //             children: <Widget>[
+            //               Container(
+            //                 width: deviceSize.width * 0.75,
+            //                 // child: Image.asset(
+            //                 //   'assets/logos/tracetales_full_logo.png',
+            //                 // ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       )
+            //     : Container(
+            //         height: deviceSize.height,
+            //         width: deviceSize.width,
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           children: <Widget>[
+            //             Flexible(
+            //               child: Container(
+            //                 width: deviceSize.width * 0.40,
+            //                 child: Image.asset(
+            //                     'assets/logos/tracetales_full_logo.png'),
+            //               ),
+            //             ),
+            //             Flexible(
+            //               child: Container(
+            //                   width: deviceSize.width * 0.30,
+            //                   child: AuthCard()),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
             orientation == Orientation.portrait
-                ? SingleChildScrollView(
+                ? Center(
                     child: Container(
-                      margin: EdgeInsets.only(top: 100),
-                      height: deviceSize.height,
-                      width: deviceSize.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: deviceSize.width * 0.75,
-                            // child: Image.asset(
-                            //   'assets/logos/tracetales_full_logo.png',
-                            // ),
-                          ),
-                        ],
-                      ),
+                      width: deviceSize.width * 0.75,
+                      child: AuthCard(),
                     ),
                   )
-                : Container(
-                    height: deviceSize.height,
-                    width: deviceSize.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Flexible(
-                          child: Container(
-                            width: deviceSize.width * 0.40,
-                            child: Image.asset(
-                                'assets/logos/tracetales_full_logo.png'),
-                          ),
-                        ),
-                        Flexible(
-                          child: Container(
-                              width: deviceSize.width * 0.30,
-                              child: AuthCard()),
-                        ),
-                      ],
+                : Center(
+                    child: Container(
+                      width: deviceSize.width * 0.35,
+                      child: AuthCard(),
                     ),
                   ),
-            if (orientation == Orientation.portrait)
-              Center(
-                child: Container(
-                  width: deviceSize.width * 0.75,
-                  child: AuthCard(),
-                ),
-              ),
           ],
         );
       }),
@@ -116,6 +122,7 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  var _passwordVisible = false;
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -166,7 +173,7 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: 220,
+        height: 265,
         constraints: BoxConstraints(minHeight: 200),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
@@ -175,8 +182,22 @@ class _AuthCardState extends State<AuthCard> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Text(
+                  appName,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(
+                  height: large,
+                ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Username'),
+                  decoration: InputDecoration(
+                    labelText: 'E-Mail',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(
+                      Icons.alternate_email_rounded,
+                    ),
+                    hintText: 'Enter your email address',
+                  ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length < 3) {
@@ -188,9 +209,29 @@ class _AuthCardState extends State<AuthCard> {
                     _authData['username'] = value!;
                   },
                 ),
+                SizedBox(
+                  height: medium,
+                ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
-                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock_rounded),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _passwordVisible
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
+                    hintText: 'Enter password',
+                  ),
+                  obscureText: !_passwordVisible,
                   controller: _passwordController,
                   validator: (value) {
                     if (value == null || value.isEmpty || value.length < 5) {

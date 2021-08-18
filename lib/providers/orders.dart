@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/order.dart';
 import '../services/order_api.dart';
 
@@ -35,7 +36,7 @@ class Orders with ChangeNotifier {
   Order? getOrderById(
     int id,
   ) {
-    final result = _orders.firstWhere(
+    final result = _orders.firstWhereOrNull(
       (order) => order.id == id,
     );
     return result;

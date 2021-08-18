@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/price_list.dart';
 import '../services/price_list_api.dart';
 
@@ -30,7 +31,7 @@ class PriceLists with ChangeNotifier {
   PriceList? getPriceListById(
     int id,
   ) {
-    final result = _priceLists.firstWhere(
+    final result = _priceLists.firstWhereOrNull(
       (prodList) => prodList.id == id,
     );
     return result;

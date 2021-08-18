@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/order_detail.dart';
 import '../services/order_detail_api.dart';
 
@@ -49,7 +50,7 @@ class Cart with ChangeNotifier {
   OrderDetail? getOrderDetailById(
     int id,
   ) {
-    final result = _cart.firstWhere(
+    final result = _cart.firstWhereOrNull(
       (orderDetail) => orderDetail.id == id,
     );
     return result;

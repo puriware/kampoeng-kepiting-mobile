@@ -18,7 +18,7 @@ class Redeem {
   factory Redeem.fromJson(Map<String, dynamic> map) {
     return Redeem(
       id: map["id"],
-      voucherCode: map["id_product"],
+      voucherCode: map["voucherCode"],
       quantity: map["quantity"],
       officer: map["officer"],
       created: map["created"] != null
@@ -30,7 +30,7 @@ class Redeem {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "id_product": voucherCode,
+      "voucherCode": voucherCode,
       "quantity": quantity,
       "officer": officer,
       "created": created,
@@ -39,7 +39,7 @@ class Redeem {
 
   @override
   String toString() {
-    return 'Redeem{id: $id, id_product: $voucherCode, quantity: $quantity, officer: $officer, created: $created}';
+    return 'Redeem{id: $id, voucherCode: $voucherCode, quantity: $quantity, officer: $officer, created: $created}';
   }
 
   static List<Redeem> redeemFromJson(String jsonData) {

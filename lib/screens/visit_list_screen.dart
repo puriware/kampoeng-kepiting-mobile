@@ -31,7 +31,11 @@ class _VisitListScreenState extends State<VisitListScreen> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
       _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
+      await _fetchVisitData();
       await Provider.of<Provinces>(context, listen: false)
           .fetchAndSetProvinces();
       await Provider.of<Regencies>(context, listen: false)
@@ -39,6 +43,9 @@ class _VisitListScreenState extends State<VisitListScreen> {
       await Provider.of<Districts>(context, listen: false)
           .fetchAndSetDistricts();
       _isInit = false;
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -110,101 +117,116 @@ class _VisitListScreenState extends State<VisitListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    final visitData = Provider.of<Visits>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Visit List'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(large),
-                    topRight: Radius.circular(large),
-                  ),
-                ),
-                context: context,
-                builder: (_) {
-                  return ClipRRect(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Visit List'),
+          actions: [
+            IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(large),
                       topRight: Radius.circular(large),
                     ),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: VisiEntryModal(_saveVisit),
-                      behavior: HitTestBehavior.opaque,
-                    ),
-                  );
-                },
-              );
-            },
-            icon: Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : FutureBuilder(
-              future: _fetchVisitData(),
-              builder: (ctx, snapshot) => RefreshIndicator(
-                onRefresh: _fetchVisitData,
-                child: Consumer<Visits>(
-                  builder: (ctx, visitData, _) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      itemBuilder: (ctx, idx) {
-                        final visit = visitData.visits[idx];
-                        final visitDate = DateTime(
-                          visit.created!.year,
-                          visit.created!.month,
-                          visit.created!.day,
-                        );
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(large),
-                          ),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: primaryBackgrounColor,
-                              child: Text((visitData.visits.length - idx)
-                                  .toString()), // Icon(Icons.qr_code),
-                            ),
-                            title: Text(
-                              DateFormat('dd MMMM yyyy').format(visit.created!),
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                            subtitle: Text(visit.region),
-                            trailing:
-                                visitDate == today && visit.visitTime == null
-                                    ? IconButton(
-                                        onPressed: () =>
-                                            _showVisitQr(visit.visitCode),
-                                        icon: Icon(
-                                          Icons.qr_code,
-                                          color: primaryColor,
-                                        ),
-                                      )
-                                    : IconButton(
-                                        onPressed: null,
-                                        icon: Icon(Icons.qr_code),
-                                      ),
-                            onTap: () {},
-                          ),
-                        );
-                      },
-                      itemCount: visitData.visits.length,
-                    ),
                   ),
-                ),
-              ),
+                  context: context,
+                  builder: (_) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(large),
+                        topRight: Radius.circular(large),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: VisiEntryModal(_saveVisit),
+                        behavior: HitTestBehavior.opaque,
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.add),
             ),
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                text: 'Todays',
+              ),
+              Tab(
+                text: 'History',
+              ),
+            ],
+            labelColor: primaryColor,
+          ),
+        ),
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : TabBarView(children: [
+                _visitListView(context, visitData.getTodaysVisit()),
+                _visitListView(context, visitData.visits)
+              ]),
+      ),
+    );
+  }
+
+  Widget _visitListView(
+    BuildContext context,
+    List<Visit> visitData,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return Padding(
+      padding: const EdgeInsets.all(medium),
+      child: ListView.builder(
+        itemBuilder: (ctx, idx) {
+          final visit = visitData[idx];
+          final visitDate = DateTime(
+            visit.created!.year,
+            visit.created!.month,
+            visit.created!.day,
+          );
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(large),
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: primaryBackgrounColor,
+                child: Text((visitData.length - idx)
+                    .toString()), // Icon(Icons.qr_code),
+              ),
+              title: Text(
+                DateFormat('dd MMMM yyyy').format(visit.created!),
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              subtitle: Text(visit.region),
+              trailing: visitDate == today && visit.visitTime == null
+                  ? IconButton(
+                      onPressed: () => _showVisitQr(visit.visitCode),
+                      icon: Icon(
+                        Icons.qr_code,
+                        color: primaryColor,
+                      ),
+                    )
+                  : IconButton(
+                      onPressed: null,
+                      icon: Icon(Icons.qr_code),
+                    ),
+              onTap: () {},
+            ),
+          );
+        },
+        itemCount: visitData.length,
+      ),
     );
   }
 }

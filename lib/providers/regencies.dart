@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/regency.dart';
 import '../services/regency_api.dart';
 
@@ -30,7 +31,7 @@ class Regencies with ChangeNotifier {
   Regency? getRegencyById(
     String id,
   ) {
-    final result = _regencies.firstWhere(
+    final result = _regencies.firstWhereOrNull(
       (regency) => regency.id == id,
     );
     return result;

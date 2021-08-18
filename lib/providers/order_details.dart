@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/order_detail.dart';
 import '../services/order_detail_api.dart';
 
@@ -14,7 +15,9 @@ class OrderDetails with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetOrderDetails({userId}) async {
+  Future<void> fetchAndSetOrderDetails({
+    int? userId,
+  }) async {
     try {
       _orderDetails = userId != null
           ? await _orderDetailApi.findOrderDetailBy(
@@ -45,8 +48,17 @@ class OrderDetails with ChangeNotifier {
   OrderDetail? getOrderDetailById(
     int id,
   ) {
-    final result = _orderDetails.firstWhere(
+    final result = _orderDetails.firstWhereOrNull(
       (orderDetail) => orderDetail.id == id,
+    );
+    return result;
+  }
+
+  OrderDetail? getOrderDetailByVoucherCode(
+    String voucherCode,
+  ) {
+    final result = _orderDetails.firstWhereOrNull(
+      (orderDetail) => orderDetail.voucherCode == voucherCode,
     );
     return result;
   }

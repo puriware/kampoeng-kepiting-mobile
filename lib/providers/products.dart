@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/product.dart';
 import '../services/product_api.dart';
 
@@ -30,7 +31,7 @@ class Products with ChangeNotifier {
   Product? getProductById(
     int id,
   ) {
-    final result = _products.firstWhere(
+    final result = _products.firstWhereOrNull(
       (prod) => prod.id == id,
     );
     return result;

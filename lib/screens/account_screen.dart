@@ -68,9 +68,9 @@ class AccountScreen extends StatelessWidget {
                     barrierDismissible: false, // user must tap button!
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Kampoeng Kepiting'),
+                        title: Text(appName),
                         content: Text(
-                            'Kampoeng Kepiting adalah sebuah merk daagngg dari Kelompok Nelayan Wanasari Tuban'),
+                            'Kampoeng Kepiting adalah sebuah merk dagang dari Kelompok Nelayan Wanasari Tuban'),
                         actions: <Widget>[
                           TextButton(
                             child: Text('Close'),

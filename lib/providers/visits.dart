@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/visit.dart';
 import '../services/visit_api.dart';
 
@@ -29,6 +30,7 @@ class Visits with ChangeNotifier {
       } else {
         _visits = await _visitApi.getVisits();
       }
+
       notifyListeners();
     } catch (error) {
       throw error;
@@ -42,10 +44,46 @@ class Visits with ChangeNotifier {
   Visit? getVisitById(
     int id,
   ) {
-    final result = _visits.firstWhere(
+    final result = _visits.firstWhereOrNull(
       (visit) => visit.id == id,
     );
     return result;
+  }
+
+  Visit? getVisitByCode(
+    String visitCode,
+  ) {
+    final result = _visits.firstWhereOrNull(
+      (visit) => visit.visitCode == visitCode,
+    );
+    return result;
+  }
+
+  List<Visit> getTodaysVisit({int? visitorId, int? officerId}) {
+    final now = DateTime.now();
+    var result = _visits
+        .where(
+          (vst) =>
+              vst.visitTime != null &&
+              vst.visitTime!.year == now.year &&
+              vst.visitTime!.month == now.month &&
+              vst.visitTime!.day == now.day,
+        )
+        .toList();
+    if (result.length > 0) {
+      if (visitorId != null) {
+        result = result.where((vst) => vst.visitor == visitorId).toList();
+      }
+
+      if (result.length > 0 && officerId != null) {
+        result = result.where((vst) => vst.officer == officerId).toList();
+      }
+    }
+    return result;
+  }
+
+  List<Visit> getVisitByOfficer(int officerId) {
+    return _visits.where((vst) => vst.officer == officerId).toList();
   }
 
   Future<Visit?> getVisitByIdFromServer(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 import '../models/district.dart';
 import '../services/district_api.dart';
 
@@ -30,7 +31,7 @@ class Districts with ChangeNotifier {
   District? getDistrictById(
     String id,
   ) {
-    final result = _districts.firstWhere(
+    final result = _districts.firstWhereOrNull(
       (district) => district.id == id,
     );
     return result;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
 import '../../constants.dart';
 import '../../providers/products.dart';
 import '../../screens/product_detail_screen.dart';
@@ -9,10 +10,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userData = Provider.of<Auth>(context, listen: false).activeUser!;
     final products = Provider.of<Products>(context).products;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kampoeng Kepiting'),
+        title: Text(appName),
       ),
       body: Stack(
         children: [
@@ -100,11 +102,20 @@ class HomeScreen extends StatelessWidget {
               ),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: primaryBackgrounColor,
-                  child: Icon(Icons.person),
+                  child: userData.picture.isEmpty
+                      ? Icon(
+                          Icons.person,
+                        )
+                      : ClipOval(
+                          child: Image.network(
+                            userData.picture,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                  backgroundColor: Colors.transparent,
                 ),
                 title: Text(
-                  'I Wayan Jepriana',
+                  '${userData.firstname.toString()} ${userData.lastname.toString()}',
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
