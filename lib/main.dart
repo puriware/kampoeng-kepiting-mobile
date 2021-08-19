@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visitor/main_screen.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visitor/product_detail_screen.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visitor/visit_entry_screen.dart';
 import './constants.dart';
 import './providers/auth.dart';
 import './providers/cart.dart';
@@ -16,12 +19,9 @@ import './providers/redeems.dart';
 import './providers/regencies.dart';
 import './providers/users.dart';
 import './providers/visits.dart';
-import './screens/auth_screen.dart';
-import './screens/main_screen.dart';
+import 'screens/common/auth_screen.dart';
 import './screens/officer/officer_main_screen.dart';
-import './screens/product_detail_screen.dart';
-import './screens/splash_screen.dart';
-import './screens/visit_entry_screen.dart';
+import 'screens/common/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

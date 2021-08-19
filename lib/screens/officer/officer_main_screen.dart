@@ -8,7 +8,7 @@ import '../../providers/price_lists.dart';
 import '../../providers/products.dart';
 import '../../providers/redeems.dart';
 import '../../providers/visits.dart';
-import '../../screens/account_screen.dart';
+import '../common/account_screen.dart';
 import '../../screens/officer/officer_home_screen.dart';
 import '../../screens/officer/redeem_screen.dart';
 import '../../screens/officer/visitor_screen.dart';

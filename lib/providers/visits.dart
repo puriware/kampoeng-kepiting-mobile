@@ -64,10 +64,10 @@ class Visits with ChangeNotifier {
     var result = _visits
         .where(
           (vst) =>
-              vst.visitTime != null &&
-              vst.visitTime!.year == now.year &&
-              vst.visitTime!.month == now.month &&
-              vst.visitTime!.day == now.day,
+              vst.created != null &&
+              vst.created!.year == now.year &&
+              vst.created!.month == now.month &&
+              vst.created!.day == now.day,
         )
         .toList();
     if (result.length > 0) {

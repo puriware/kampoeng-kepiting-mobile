@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart';
-import '../../providers/auth.dart';
-import '../../widgets/adaptive_flat_button.dart';
-import '../../widgets/message_dialog.dart';
+import '../../../constants.dart';
+import '../../../providers/auth.dart';
+import '../../../widgets/adaptive_flat_button.dart';
+import '../../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/message_dialog.dart';
-import '../../constants.dart';
-import '../providers/auth.dart';
+import '../../../widgets/message_dialog.dart';
+import '../../../constants.dart';
+import '../../providers/auth.dart';
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';

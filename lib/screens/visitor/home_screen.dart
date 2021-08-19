@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
+import '../../providers/auth.dart';
+import '../../screens/visitor/product_detail_screen.dart';
 import '../../constants.dart';
 import '../../providers/products.dart';
-import '../../screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/visit_item.dart';
 import '../../constants.dart';
 import '../../models/visit.dart';
 import '../../providers/auth.dart';
@@ -182,48 +183,12 @@ class _VisitListScreenState extends State<VisitListScreen> {
     BuildContext context,
     List<Visit> visitData,
   ) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
     return Padding(
       padding: const EdgeInsets.all(medium),
       child: ListView.builder(
         itemBuilder: (ctx, idx) {
           final visit = visitData[idx];
-          final visitDate = DateTime(
-            visit.created!.year,
-            visit.created!.month,
-            visit.created!.day,
-          );
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(large),
-            ),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: primaryBackgrounColor,
-                child: Text((visitData.length - idx)
-                    .toString()), // Icon(Icons.qr_code),
-              ),
-              title: Text(
-                DateFormat('dd MMMM yyyy').format(visit.created!),
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              subtitle: Text(visit.region),
-              trailing: visitDate == today && visit.visitTime == null
-                  ? IconButton(
-                      onPressed: () => _showVisitQr(visit.visitCode),
-                      icon: Icon(
-                        Icons.qr_code,
-                        color: primaryColor,
-                      ),
-                    )
-                  : IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.qr_code),
-                    ),
-              onTap: () {},
-            ),
-          );
+          return VisitItem(visit, visitData.length - idx, _showVisitQr);
         },
         itemCount: visitData.length,
       ),

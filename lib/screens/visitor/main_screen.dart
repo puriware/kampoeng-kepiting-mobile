@@ -8,11 +8,11 @@ import '../../providers/orders.dart';
 import '../../providers/price_lists.dart';
 import '../../providers/products.dart';
 import '../../providers/redeems.dart';
-import '../../screens/account_screen.dart';
-import '../../screens/home_screen.dart';
-import '../../screens/shop_screen.dart';
-import '../../screens/visit_list_screen.dart';
-import '../../screens/voucher_list_screen.dart';
+import '../common/account_screen.dart';
+import './home_screen.dart';
+import './shop_screen.dart';
+import './visit_list_screen.dart';
+import './voucher_list_screen.dart';
 import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
