@@ -14,6 +14,13 @@ const inactiveColor = Color(0xFFCABDEB);
 const dangerColor = Color(0xFFF8485E);
 const acceptColor = Color(0xFF00C1D4);
 
+const kTextColor = Color(0xFF1E2432);
+const kTextMediumColor = Color(0xFF53627C);
+const kTextLightColor = Color(0xFFACB1C0);
+const kPrimaryColor = Color(0xFF0D8E53);
+const kBackgroundColor = Color(0xFFFCFCFC);
+const kInactiveChartColor = Color(0xFFEAECEF);
+
 // Sizes
 const extraSmall = 2.0;
 const small = 4.0;

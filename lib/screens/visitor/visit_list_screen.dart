@@ -1,20 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kampoeng_kepiting_mobile/widgets/visit_item.dart';
 import '../../constants.dart';
 import '../../models/visit.dart';
 import '../../providers/auth.dart';
-import '../../providers/districts.dart';
-import '../../providers/provinces.dart';
-import '../../providers/regencies.dart';
 import '../../providers/visits.dart';
 import '../../widgets/message_dialog.dart';
 import '../../widgets/visit_entry_modal.dart';
 import 'package:nanoid/async.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+
+enum FilterOptions {
+  Todays,
+  All,
+}
 
 class VisitListScreen extends StatefulWidget {
   const VisitListScreen({Key? key}) : super(key: key);
@@ -26,34 +27,30 @@ class VisitListScreen extends StatefulWidget {
 class _VisitListScreenState extends State<VisitListScreen> {
   var _isLoading = false;
   var _isInit = true;
+  var _onlyTodays = true;
   int? _userID;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
       _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
+
       await _fetchVisitData();
-      await Provider.of<Provinces>(context, listen: false)
-          .fetchAndSetProvinces();
-      await Provider.of<Regencies>(context, listen: false)
-          .fetchAndSetRegencies();
-      await Provider.of<Districts>(context, listen: false)
-          .fetchAndSetDistricts();
       _isInit = false;
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   Future<void> _fetchVisitData() async {
+    setState(() {
+      _isLoading = true;
+    });
     if (_userID != null)
       await Provider.of<Visits>(context, listen: false)
           .fetchAndSetVisits(userId: _userID);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _saveVisit(
@@ -120,62 +117,72 @@ class _VisitListScreenState extends State<VisitListScreen> {
   Widget build(BuildContext context) {
     final visitData = Provider.of<Visits>(context);
 
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Visit List'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Visit List'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(large),
+                    topRight: Radius.circular(large),
+                  ),
+                ),
+                context: context,
+                builder: (_) {
+                  return ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(large),
                       topRight: Radius.circular(large),
                     ),
-                  ),
-                  context: context,
-                  builder: (_) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(large),
-                        topRight: Radius.circular(large),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: VisiEntryModal(_saveVisit),
-                        behavior: HitTestBehavior.opaque,
-                      ),
-                    );
-                  },
-                );
-              },
-              icon: Icon(Icons.add),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: VisiEntryModal(_saveVisit),
+                      behavior: HitTestBehavior.opaque,
+                    ),
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.add),
+          ),
+          PopupMenuButton(
+            onSelected: (selectedValue) {
+              setState(() {
+                if (selectedValue == FilterOptions.Todays) {
+                  _onlyTodays = true;
+                } else {
+                  _onlyTodays = false;
+                }
+              });
+            },
+            icon: Icon(
+              Icons.more_vert,
             ),
-          ],
-          bottom: const TabBar(
-            tabs: [
-              Tab(
-                text: 'Todays',
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                child: Text('Todays'),
+                value: FilterOptions.Todays,
               ),
-              Tab(
-                text: 'History',
+              PopupMenuItem(
+                child: Text('Show All'),
+                value: FilterOptions.All,
               ),
             ],
-            labelColor: primaryColor,
           ),
-        ),
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : TabBarView(children: [
-                _visitListView(context, visitData.getTodaysVisit()),
-                _visitListView(context, visitData.visits)
-              ]),
+        ],
       ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : _visitListView(
+              context,
+              _onlyTodays ? visitData.getTodaysVisit() : visitData.visits,
+            ),
     );
   }
 

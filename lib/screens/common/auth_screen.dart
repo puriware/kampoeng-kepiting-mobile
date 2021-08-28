@@ -88,7 +88,7 @@ class AuthScreen extends StatelessWidget {
             orientation == Orientation.portrait
                 ? Center(
                     child: Container(
-                      width: deviceSize.width * 0.75,
+                      width: deviceSize.width * 0.85,
                       child: AuthCard(),
                     ),
                   )

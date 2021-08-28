@@ -24,7 +24,7 @@ class VoucherListScreen extends StatefulWidget {
 class _VoucherListScreenState extends State<VoucherListScreen> {
   var _isLoading = false;
   var _isInit = true;
-  var _onlyAvailable = false;
+  var _onlyAvailable = true;
   int? _userID;
 
   @override
@@ -91,57 +91,60 @@ class _VoucherListScreenState extends State<VoucherListScreen> {
             )
           : RefreshIndicator(
               onRefresh: _fetchVoucherData,
-              child: ListView.builder(
-                itemBuilder: (ctx, idx) {
-                  final order = voucherList![idx];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(large),
-                    ),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: primaryBackgrounColor,
-                        child: Text(
-                          (voucherList.length - idx).toString(),
-                        ), // Icon(Icons.qr_code),
+              child: Padding(
+                padding: const EdgeInsets.all(medium),
+                child: ListView.builder(
+                  itemBuilder: (ctx, idx) {
+                    final order = voucherList![idx];
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(large),
                       ),
-                      title: Text(
-                        convertToTitleCase(
-                          Provider.of<Products>(context, listen: false)
-                              .getProductById(order.idProduct)!
-                              .name
-                              .toString(),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: primaryBackgrounColor,
+                          child: Text(
+                            (voucherList.length - idx).toString(),
+                          ), // Icon(Icons.qr_code),
                         ),
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      subtitle: Text(
-                          '${order.remaining} from ${order.quantity} voucher available'),
-                      trailing: order.remaining > 0
-                          ? IconButton(
-                              onPressed: () async {
-                                Uint8List qrcode = await scanner
-                                    .generateBarCode(order.voucherCode!);
-                                await MessageDialog.showQrDialog(
-                                  context,
-                                  "Voucher QR Code",
-                                  qrcode,
-                                );
-                                _fetchVoucherData();
-                              },
-                              icon: Icon(
-                                Icons.qr_code,
-                                color: primaryColor,
+                        title: Text(
+                          convertToTitleCase(
+                            Provider.of<Products>(context, listen: false)
+                                .getProductById(order.idProduct)!
+                                .name
+                                .toString(),
+                          ),
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        subtitle: Text(
+                            '${order.remaining} from ${order.quantity} voucher available'),
+                        trailing: order.remaining > 0
+                            ? IconButton(
+                                onPressed: () async {
+                                  Uint8List qrcode = await scanner
+                                      .generateBarCode(order.voucherCode!);
+                                  await MessageDialog.showQrDialog(
+                                    context,
+                                    "Voucher QR Code",
+                                    qrcode,
+                                  );
+                                  _fetchVoucherData();
+                                },
+                                icon: Icon(
+                                  Icons.qr_code,
+                                  color: primaryColor,
+                                ),
+                              )
+                            : IconButton(
+                                onPressed: null,
+                                icon: Icon(Icons.qr_code),
                               ),
-                            )
-                          : IconButton(
-                              onPressed: null,
-                              icon: Icon(Icons.qr_code),
-                            ),
-                      onTap: () {},
-                    ),
-                  );
-                },
-                itemCount: voucherList != null ? voucherList.length : 0,
+                        onTap: () {},
+                      ),
+                    );
+                  },
+                  itemCount: voucherList != null ? voucherList.length : 0,
+                ),
               ),
             ),
     );

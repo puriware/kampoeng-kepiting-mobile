@@ -1,6 +1,9 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
+import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
+import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
 import '../../constants.dart';
 import '../../providers/auth.dart';
 import '../../providers/order_details.dart';
@@ -24,28 +27,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Map<String, Object>> _pages = [
-    {
-      'page': HomeScreen(),
-      'title': 'Kampoeng Kepiting',
-    },
-    {
-      'page': ShopScreen(),
-      'title': 'Shoping List',
-    },
-    {
-      'page': VisitListScreen(),
-      'title': 'Visit List',
-    },
-    {
-      'page': VoucherListScreen(),
-      'title': 'Voucher List',
-    },
-    {
-      'page': AccountScreen(),
-      'title': 'My Account',
-    },
-  ];
+  List<Map<String, Object>> _pages = [];
 
   PageController _pageController = PageController();
   int _selectedPageIndex = 0;
@@ -60,6 +42,28 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         _isLoading = true;
       });
+      _pages = [
+        {
+          'page': HomeScreen(_selectPage),
+          'title': 'Kampoeng Kepiting',
+        },
+        {
+          'page': ShopScreen(),
+          'title': 'Shoping List',
+        },
+        {
+          'page': VisitListScreen(),
+          'title': 'Visit List',
+        },
+        {
+          'page': VoucherListScreen(),
+          'title': 'Voucher List',
+        },
+        {
+          'page': AccountScreen(),
+          'title': 'My Account',
+        },
+      ];
       try {
         _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
         await Provider.of<Products>(
@@ -82,6 +86,12 @@ class _MainScreenState extends State<MainScreen> {
           context,
           listen: false,
         ).fetchAndSetRedeems();
+        await Provider.of<Provinces>(context, listen: false)
+            .fetchAndSetProvinces();
+        await Provider.of<Regencies>(context, listen: false)
+            .fetchAndSetRegencies();
+        await Provider.of<Districts>(context, listen: false)
+            .fetchAndSetDistricts();
         _isInit = false;
       } catch (error) {
         MessageDialog.showPopUpMessage(

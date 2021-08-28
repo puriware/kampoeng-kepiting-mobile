@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import '../../../providers/auth.dart';
@@ -17,14 +18,14 @@ class AccountScreen extends StatelessWidget {
         title: Text('My Account'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(32),
-        child: Center(
+        padding: EdgeInsets.symmetric(horizontal: large),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: deviceSize.width * 0.5,
-                width: deviceSize.width * 0.5,
+                height: deviceSize.width * 0.3,
+                width: deviceSize.width * 0.3,
                 child: CircleAvatar(
                   child: userData.picture.isEmpty
                       ? Icon(
@@ -52,14 +53,48 @@ class AccountScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: medium,
+                height: small,
               ),
               Text(
                 userData.level,
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
-              Spacer(),
+              SizedBox(
+                height: large,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(16),
+                  ),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text('Accout'),
+                      subtitle: Text('Update profile & password'),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.arrow_forward_ios_rounded),
+                      ),
+                    ),
+                    Divider(),
+                    ListTile(
+                      title: Text('History Transaction'),
+                      subtitle: Text('8 Purchase'),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.arrow_forward_ios_rounded),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: large,
+              ),
               AdaptiveFlatButton(
                 'About',
                 () {
@@ -106,6 +141,9 @@ class AccountScreen extends StatelessWidget {
                 },
                 Colors.red,
                 Icon(Icons.logout),
+              ),
+              SizedBox(
+                height: large,
               ),
             ],
           ),

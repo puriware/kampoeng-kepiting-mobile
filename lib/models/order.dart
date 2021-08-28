@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class Order {
   int id;
-  String bookingCode;
+  String? bookingCode;
   int idCustomer;
   double total;
   double disc;
@@ -14,7 +14,7 @@ class Order {
 
   Order({
     this.id = 0,
-    required this.bookingCode,
+    this.bookingCode,
     required this.idCustomer,
     required this.total,
     required this.disc,

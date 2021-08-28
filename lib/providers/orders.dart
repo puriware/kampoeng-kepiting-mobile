@@ -42,19 +42,20 @@ class Orders with ChangeNotifier {
     return result;
   }
 
-  Future<String> addOrder(Order data) async {
-    var result = "Submit new data is success";
+  Future<int?> addOrder(Order data) async {
+    int? id;
     try {
       final newID = await _orderApi.createOrder(data);
       if (newID != null) {
-        data.id = int.parse(newID);
+        id = int.parse(newID);
+        data.id = id;
         _orders.insert(0, data);
         notifyListeners();
       }
     } catch (error) {
       throw error;
     }
-    return result;
+    return id;
   }
 
   Future<String> updateOrder(Order data) async {

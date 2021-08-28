@@ -62,12 +62,12 @@ class OrderDetail {
       "orderType": orderType,
       "quantity": quantity,
       "price": price,
-      "visitDate": visitDate,
+      "visitDate": visitDate != null ? visitDate!.toIso8601String() : null,
       "note": note,
       "voucherCode": voucherCode,
       "remaining": remaining,
-      "created": created,
-      "updated": updated,
+      "created": created != null ? created!.toIso8601String() : null,
+      "updated": updated != null ? updated!.toIso8601String() : null,
     };
   }
 

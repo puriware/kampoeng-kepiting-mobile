@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../constants.dart';
 import '../models/order_detail.dart';
 import 'package:http/http.dart' show Client;
@@ -55,6 +57,31 @@ class OrderDetailApi {
     try {
       final response = await client.get(
         Uri.http(baseUrl, '/order-details/cart/$id'),
+        headers: {'token': token},
+      );
+      if (response.statusCode == 200) {
+        Map data = json.decode(response.body);
+        return List<OrderDetail>.from(
+          data['values'].map(
+            (item) => OrderDetail.fromJson(item),
+          ),
+        );
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<List<OrderDetail>> getRedeemedOrder(
+    DateTime start,
+    DateTime end,
+  ) async {
+    try {
+      final response = await client.get(
+        Uri.http(baseUrl,
+            '/order-details/redeemed/${DateFormat('yyyy-MM-dd').format(start)}/${DateFormat('yyyy-MM-dd').format(end)}'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {

@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kampoeng_kepiting_mobile/screens/common/visit_detail_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/visitor/main_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/visitor/product_detail_screen.dart';
 import 'package:kampoeng_kepiting_mobile/screens/visitor/visit_entry_screen.dart';
 import './constants.dart';
 import './providers/auth.dart';
-import './providers/cart.dart';
 import './providers/districts.dart';
 import './providers/order_details.dart';
 import './providers/orders.dart';
@@ -128,18 +128,6 @@ class _MyAppState extends State<MyApp> {
           ) =>
               OrderDetails(
             prevOrderDetails == null ? [] : prevOrderDetails.orderDetails,
-            token: auth.token,
-          ),
-        ),
-        ChangeNotifierProxyProvider<Auth, Cart>(
-          create: (_) => Cart([]),
-          update: (
-            ctx,
-            auth,
-            prevCart,
-          ) =>
-              Cart(
-            prevCart == null ? [] : prevCart.items,
             token: auth.token,
           ),
         ),
@@ -275,6 +263,7 @@ class _MyAppState extends State<MyApp> {
           routes: {
             VisitEntryScreen.routeName: (ctx) => VisitEntryScreen(),
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            VisitDetailScreen.routeName: (ctx) => VisitDetailScreen(),
           },
           onUnknownRoute: (settings) => MaterialPageRoute(
             builder: (ctx) => MainScreen(),

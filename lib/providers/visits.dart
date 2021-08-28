@@ -75,11 +75,73 @@ class Visits with ChangeNotifier {
         result = result.where((vst) => vst.visitor == visitorId).toList();
       }
 
-      if (result.length > 0 && officerId != null) {
+      if (officerId != null) {
         result = result.where((vst) => vst.officer == officerId).toList();
       }
     }
     return result;
+  }
+
+  int get todaysTotalVisit {
+    final now = DateTime.now();
+    var result = _visits
+        .where(
+          (vst) =>
+              vst.visitTime != null &&
+              vst.visitTime!.year == now.year &&
+              vst.visitTime!.month == now.month &&
+              vst.visitTime!.day == now.day,
+        )
+        .toList();
+    return result.length;
+  }
+
+  List<Visit> get thisWeekVisits {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final weekday = today.weekday;
+    final start = today.add(Duration(days: -(weekday - 1)));
+    return [
+      ..._visits
+          .where(
+            (vst) =>
+                vst.visitTime != null &&
+                vst.visitTime!.year >= start.year &&
+                vst.visitTime!.month >= start.month &&
+                vst.visitTime!.day >= start.day,
+          )
+          .toList()
+    ];
+  }
+
+  List<Visit> get prevWeekVisits {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final weekday = today.weekday;
+    final start = today.add(Duration(days: -(6 + weekday)));
+    final end = today.add(Duration(days: -weekday));
+    return [
+      ..._visits
+          .where(
+            (vst) =>
+                vst.visitTime != null &&
+                vst.visitTime!.year >= start.year &&
+                vst.visitTime!.month >= start.month &&
+                vst.visitTime!.day >= start.day &&
+                vst.visitTime!.year <= end.year &&
+                vst.visitTime!.month <= end.month &&
+                vst.visitTime!.day <= end.day,
+          )
+          .toList()
+    ];
+  }
+
+  int get thisWeekTotalVisit {
+    return thisWeekVisits.length;
+  }
+
+  int get prevWeekTotalVisit {
+    return prevWeekVisits.length;
   }
 
   List<Visit> getVisitByOfficer(int officerId) {

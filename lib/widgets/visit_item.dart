@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
 import 'package:kampoeng_kepiting_mobile/models/visit.dart';
 import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
+import 'package:kampoeng_kepiting_mobile/screens/common/visit_detail_screen.dart';
 import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,12 @@ class _VisitItemState extends State<VisitItem> {
                 onPressed: null,
                 icon: Icon(Icons.qr_code),
               ),
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            VisitDetailScreen.routeName,
+            arguments: visit.id,
+          );
+        },
         onLongPress: () async {
           if (visit.visitTime == null)
             MessageDialog.showMessageDialog(

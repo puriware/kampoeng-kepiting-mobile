@@ -41,6 +41,10 @@ class OrderDetails with ChangeNotifier {
         .toList();
   }
 
+  int get totalAvailableVoucers {
+    return availableVoucher != null ? availableVoucher!.length : 0;
+  }
+
   List<OrderDetail>? get voucherIssued {
     return _orderDetails.where((order) => order.voucherCode != null).toList();
   }
@@ -119,4 +123,140 @@ class OrderDetails with ChangeNotifier {
     }
     return result;
   }
+
+  // CART SECTION
+  List<OrderDetail> get items {
+    return _orderDetails.where((order) => order.orderId == null).toList();
+  }
+
+  int get itemCount {
+    return items.length;
+  }
+
+  double get totalAmount {
+    double total = 0.0;
+    items.forEach((cart) {
+      total += cart.price * cart.quantity;
+    });
+    return total;
+  }
+
+  // void clear() {
+  //   items = [];
+  //   notifyListeners();
+  // }
+
+  OrderDetail? getCartById(
+    int id,
+  ) {
+    final result = items.firstWhereOrNull(
+      (orderDetail) => orderDetail.id == id,
+    );
+    return result;
+  }
+
+  Future<void> createItem(OrderDetail data) async {
+    try {
+      final newID = await _orderDetailApi.createOrderDetail(data);
+      if (newID != null) {
+        data.id = int.parse(newID);
+        _orderDetails.insert(0, data);
+        notifyListeners();
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> addItem(OrderDetail data) async {
+    final indexProduct = items.indexWhere((orderDetail) =>
+        orderDetail.idProduct == data.idProduct &&
+        orderDetail.orderType == data.orderType);
+    if (indexProduct >= 0) {
+      final selectedProduct = items[indexProduct];
+      selectedProduct.quantity += data.quantity;
+      try {
+        final isSuccess =
+            await _orderDetailApi.updateOrderDetail(selectedProduct);
+        if (isSuccess) {
+          items[indexProduct] = selectedProduct;
+          notifyListeners();
+        }
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      await addOrderDetail(data);
+    }
+  }
+
+  Future<String> deleteItem(int id) async {
+    var result = 'Successfully deleted data';
+    final orderDetailIndex =
+        items.indexWhere((orderDetail) => orderDetail.id == id);
+
+    if (orderDetailIndex >= 0) {
+      try {
+        final isSuccess = await _orderDetailApi.deleteOrderDetail(id);
+        if (isSuccess) {
+          items.removeAt(orderDetailIndex);
+          notifyListeners();
+        }
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      result = 'Failed to delete data. Data not found.';
+    }
+    return result;
+  }
+
+  Future<void> addSingleItem(int productId, String orderType) async {
+    final indexProduct = items.indexWhere((element) =>
+        element.idProduct == productId && element.orderType == orderType);
+    if (indexProduct < 0) return;
+    final selectedProduct = items[indexProduct];
+    selectedProduct.quantity += 1;
+    try {
+      final isSuccess =
+          await _orderDetailApi.updateOrderDetail(selectedProduct);
+      if (isSuccess) {
+        items[indexProduct] = selectedProduct;
+        notifyListeners();
+      }
+    } catch (error) {
+      throw error;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> removeSingleItem(int productId, String orderType,
+      {int? number}) async {
+    final indexProduct = items.indexWhere((element) =>
+        element.idProduct == productId && element.orderType == orderType);
+    if (indexProduct < 0) return;
+    final selectedProduct = items[indexProduct];
+    final value = number ?? 1;
+    if (selectedProduct.quantity > value) {
+      selectedProduct.quantity -= value;
+      try {
+        final isSuccess =
+            await _orderDetailApi.updateOrderDetail(selectedProduct);
+        if (isSuccess) {
+          items[indexProduct] = selectedProduct;
+          notifyListeners();
+        }
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      await deleteItem(selectedProduct.id);
+    }
+
+    notifyListeners();
+  }
+
+  // REDEEM SECTION
+  List<OrderDetails>? getOrderOfTheWeek() {}
 }

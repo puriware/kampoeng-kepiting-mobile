@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kampoeng_kepiting_mobile/screens/common/visit_detail_screen.dart';
 import '../../constants.dart';
 import '../../models/user.dart';
 import '../../providers/auth.dart';
@@ -66,7 +67,6 @@ class _VisitorScreenState extends State<VisitorScreen> {
   _saveVisit(String? visitCode) async {
     if (visitCode != null && visitCode.isNotEmpty && _officerAccount != null) {
       try {
-        print(visitCode);
         final visitData = Provider.of<Visits>(context, listen: false)
             .getVisitByCode(visitCode);
         if (visitData != null) {
@@ -141,6 +141,12 @@ class _VisitorScreenState extends State<VisitorScreen> {
                         trailing: Text(
                           DateFormat('HH:mm').format(visit.visitTime!),
                         ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            VisitDetailScreen.routeName,
+                            arguments: visit.id,
+                          );
+                        },
                       ),
                     );
                   },

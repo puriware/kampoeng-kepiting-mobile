@@ -37,6 +37,28 @@ class PriceLists with ChangeNotifier {
     return result;
   }
 
+  List<PriceList> getProductPriceByProductId(
+    int productId,
+  ) {
+    return _priceLists
+        .where(
+          (prodList) => prodList.idProduct == productId,
+        )
+        .toList();
+  }
+
+  double? getMinimumProductPriceById(
+    int productId,
+  ) {
+    final result = _priceLists
+        .where(
+          (prodList) => prodList.idProduct == productId,
+        )
+        .toList();
+    result.sort((listA, listB) => listA.price.compareTo(listB.price));
+    if (result.isNotEmpty) return result[0].price;
+  }
+
   Future<String> addPriceList(PriceList data) async {
     var result = "Submit new data is success";
     try {

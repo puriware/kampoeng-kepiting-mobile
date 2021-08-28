@@ -1,6 +1,9 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
+import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
+import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
 import 'package:kampoeng_kepiting_mobile/providers/users.dart';
 import '../../constants.dart';
 import '../../providers/order_details.dart';
@@ -79,6 +82,18 @@ class _OfficerMainScreenState extends State<OfficerMainScreen> {
           context,
           listen: false,
         ).fetchAndSetUsers();
+        await Provider.of<Provinces>(
+          context,
+          listen: false,
+        ).fetchAndSetProvinces();
+        await Provider.of<Regencies>(
+          context,
+          listen: false,
+        ).fetchAndSetRegencies();
+        await Provider.of<Districts>(
+          context,
+          listen: false,
+        ).fetchAndSetDistricts();
         _isInit = false;
       } catch (error) {
         MessageDialog.showPopUpMessage(
