@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/models/product.dart';
+import '../../models/product.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Colors

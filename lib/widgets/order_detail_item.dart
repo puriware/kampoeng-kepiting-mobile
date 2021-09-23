@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/product.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/screens/visitor/product_detail_screen.dart';
+import '../../constants.dart';
+import '../../models/product.dart';
+import '../../providers/order_details.dart';
+import '../../screens/visitor/product_detail_screen.dart';
 import '../../providers/products.dart';
 import 'package:provider/provider.dart';
 

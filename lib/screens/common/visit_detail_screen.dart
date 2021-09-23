@@ -3,13 +3,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
-import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
-import 'package:kampoeng_kepiting_mobile/providers/users.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
+import '../../constants.dart';
+import '../../providers/auth.dart';
+import '../../providers/districts.dart';
+import '../../providers/provinces.dart';
+import '../../providers/regencies.dart';
+import '../../providers/users.dart';
+import '../../providers/visits.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 

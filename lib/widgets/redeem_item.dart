@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/redeem.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/providers/products.dart';
-import 'package:kampoeng_kepiting_mobile/providers/redeems.dart';
-import 'package:kampoeng_kepiting_mobile/providers/users.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import '../../constants.dart';
+import '../../models/redeem.dart';
+import '../../providers/order_details.dart';
+import '../../providers/products.dart';
+import '../../providers/redeems.dart';
+import '../../providers/users.dart';
+import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 class RedeemItem extends StatefulWidget {

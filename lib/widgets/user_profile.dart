@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
+import '../../constants.dart';
+import '../../providers/auth.dart';
+import '../../providers/order_details.dart';
 import 'package:provider/provider.dart';
 
 class UserProfile extends StatelessWidget {

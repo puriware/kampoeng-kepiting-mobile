@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:kampoeng_kepiting_mobile/services/user_api.dart';
+import '../../services/user_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/user.dart';
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/visit.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
-import 'package:kampoeng_kepiting_mobile/screens/common/visit_detail_screen.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import '../../constants.dart';
+import '../../models/visit.dart';
+import '../../providers/visits.dart';
+import '../../screens/common/visit_detail_screen.dart';
+import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 class VisitItem extends StatefulWidget {

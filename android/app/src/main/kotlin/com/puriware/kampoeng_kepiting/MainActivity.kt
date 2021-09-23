@@ -1,4 +1,4 @@
-package com.example.kampoeng_kepiting_mobile
+package com.puriware.kampoeng_kepiting
 
 import io.flutter.embedding.android.FlutterActivity
 

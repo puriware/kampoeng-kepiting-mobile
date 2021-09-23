@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/screens/common/visit_detail_screen.dart';
+import '../../screens/common/visit_detail_screen.dart';
 import '../../constants.dart';
 import '../../models/user.dart';
 import '../../providers/auth.dart';

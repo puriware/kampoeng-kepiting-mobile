@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
+import '../../constants.dart';
 import 'dart:math';
 
-import 'package:kampoeng_kepiting_mobile/models/order.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/order_detail_item.dart';
+import '../../models/order.dart';
+import '../../providers/order_details.dart';
+import '../../widgets/order_detail_item.dart';
 import 'package:provider/provider.dart';
 
 class OrderItem extends StatefulWidget {

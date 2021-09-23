@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/models/order.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/cart_list.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import '../../models/order.dart';
+import '../../providers/auth.dart';
+import '../../providers/order_details.dart';
+import '../../providers/orders.dart';
+import '../../widgets/cart_list.dart';
+import '../../widgets/message_dialog.dart';
 import '../../constants.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +28,7 @@ class ShopScreen extends StatelessWidget {
               margin: EdgeInsets.all(large),
               child: ListTile(
                 leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Text(
                     cart.itemCount.toString(),
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
-import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
+import '../../providers/price_lists.dart';
 import 'package:provider/provider.dart';
 import '../models/order_detail.dart';
 import '../services/order_detail_api.dart';

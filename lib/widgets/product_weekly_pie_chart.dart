@@ -1,11 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/products.dart';
-import 'package:kampoeng_kepiting_mobile/services/order_detail_api.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/indicator.dart';
+import '../../constants.dart';
+import '../../providers/auth.dart';
+import '../../providers/products.dart';
+import '../../services/order_detail_api.dart';
+import '../../widgets/indicator.dart';
 import 'package:provider/provider.dart';
 
 class ProductWeeklyPieChart extends StatefulWidget {

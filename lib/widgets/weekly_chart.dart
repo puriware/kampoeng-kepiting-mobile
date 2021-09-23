@@ -1,23 +1,23 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/visit.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
+import '../../constants.dart';
+import '../../models/visit.dart';
+import '../../providers/visits.dart';
 import 'package:provider/provider.dart';
 
 class WeeklyChart extends StatelessWidget {
   final now = DateTime.now();
-  List<Visit> thisWeekVisits = [];
+  //List<Visit> thisWeekVisits = [];
 
   @override
   Widget build(BuildContext context) {
-    thisWeekVisits = Provider.of<Visits>(context).thisWeekVisits;
+    final thisWeekVisits = Provider.of<Visits>(context).thisWeekVisits;
 
     return AspectRatio(
       aspectRatio: 1.7,
       child: BarChart(
         BarChartData(
-          barGroups: getBarGroups(),
+          barGroups: getBarGroups(thisWeekVisits),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
             leftTitles: SideTitles(
@@ -42,9 +42,10 @@ class WeeklyChart extends StatelessWidget {
     );
   }
 
-  getBarGroups() {
-    List<double> barChartDatas =
-        thisWeekVisits.isNotEmpty ? getTotalByDay() : [0, 0, 0, 0, 0, 0, 0];
+  getBarGroups(List<Visit> thisWeekVisits) {
+    List<double> barChartDatas = thisWeekVisits.isNotEmpty
+        ? getTotalByDay(thisWeekVisits)
+        : [0, 0, 0, 0, 0, 0, 0];
     List<BarChartGroupData> barChartGroups = [];
     final weekday = DateTime.now().weekday;
     barChartDatas.asMap().forEach(
@@ -64,7 +65,7 @@ class WeeklyChart extends StatelessWidget {
     return barChartGroups;
   }
 
-  List<double> getTotalByDay() {
+  List<double> getTotalByDay(List<Visit> thisWeekVisits) {
     final now = DateTime.now();
     final today = DateTime(
       now.year,

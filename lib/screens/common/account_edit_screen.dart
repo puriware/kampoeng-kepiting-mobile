@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/user.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/users.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
+import '../../constants.dart';
+import '../../models/user.dart';
+import '../../providers/auth.dart';
+import '../../providers/users.dart';
+import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 class AccountEditScreen extends StatefulWidget {

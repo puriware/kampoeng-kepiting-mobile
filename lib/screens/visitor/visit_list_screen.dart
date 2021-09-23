@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/visit_item.dart';
+import '../../widgets/visit_item.dart';
 import '../../constants.dart';
 import '../../models/visit.dart';
 import '../../providers/auth.dart';

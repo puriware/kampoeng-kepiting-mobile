@@ -1,10 +1,10 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
-import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
-import 'package:kampoeng_kepiting_mobile/providers/users.dart';
+import '../../providers/districts.dart';
+import '../../providers/provinces.dart';
+import '../../providers/regencies.dart';
+import '../../providers/users.dart';
 import '../../constants.dart';
 import '../../providers/order_details.dart';
 import '../../providers/price_lists.dart';

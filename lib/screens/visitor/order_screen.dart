@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/order_item.dart';
+import '../../providers/orders.dart';
+import '../../widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
 class OrderScreen extends StatelessWidget {

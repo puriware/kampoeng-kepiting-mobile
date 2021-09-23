@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/models/price_list.dart';
-import 'package:kampoeng_kepiting_mobile/models/product.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
+import '../../models/price_list.dart';
+import '../../models/product.dart';
+import '../../providers/order_details.dart';
+import '../../providers/price_lists.dart';
 import '../../constants.dart';
 import '../../models/order_detail.dart';
 import '../../providers/auth.dart';

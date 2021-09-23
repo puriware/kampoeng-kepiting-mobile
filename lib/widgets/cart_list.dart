@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/models/order_detail.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/cart_item.dart';
+import '../../models/order_detail.dart';
+import '../../providers/order_details.dart';
+import '../../widgets/cart_item.dart';
 import 'package:provider/provider.dart';
 
 class CartList extends StatefulWidget {

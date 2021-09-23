@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/providers/visits.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/product_weekly_pie_chart.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/user_profile.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/weekly_chart.dart';
+import '../../constants.dart';
+import '../../providers/visits.dart';
+import '../../widgets/product_weekly_pie_chart.dart';
+import '../../widgets/user_profile.dart';
+import '../../widgets/weekly_chart.dart';
 import 'package:provider/provider.dart';
 
 class OfficerHomeScreen extends StatelessWidget {

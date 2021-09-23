@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
-import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
-import 'package:kampoeng_kepiting_mobile/widgets/user_profile.dart';
+import '../../providers/auth.dart';
+import '../../providers/price_lists.dart';
+import '../../widgets/user_profile.dart';
 import '../../screens/visitor/product_detail_screen.dart';
 import '../../constants.dart';
 import '../../providers/products.dart';
