@@ -12,7 +12,7 @@ class VisitApi {
   Future<List<Visit>> getVisits() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/visits'),
+        Uri.https(baseUrl, '/visits'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class VisitApi {
   Future<List<Visit>> findVisit(int id) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/visits/$id'),
+        Uri.https(baseUrl, '/visits/$id'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class VisitApi {
   Future<List<Visit>> findVisitBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/visits/$key/$value'),
+        Uri.https(baseUrl, '/visits/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class VisitApi {
   Future<String?> createVisit(Visit data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/visits'),
+        Uri.https(baseUrl, '/visits'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class VisitApi {
   Future<bool> updateVisit(Visit data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/visits'),
+        Uri.https(baseUrl, '/visits'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class VisitApi {
   Future<bool> deleteVisit(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/visits/$id'),
+        Uri.https(baseUrl, '/visits/$id'),
         headers: {'token': token},
       );
 

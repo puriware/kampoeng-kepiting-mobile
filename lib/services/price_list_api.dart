@@ -12,7 +12,7 @@ class PriceListApi {
   Future<List<PriceList>> getPriceLists() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/price-lists'),
+        Uri.https(baseUrl, '/price-lists'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class PriceListApi {
   Future<List<PriceList>> findPriceList(String id) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/price-lists/$id'),
+        Uri.https(baseUrl, '/price-lists/$id'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class PriceListApi {
   Future<List<PriceList>> findPriceListBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/price-lists/$key/$value'),
+        Uri.https(baseUrl, '/price-lists/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class PriceListApi {
   Future<String?> createPriceList(PriceList data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/price-lists'),
+        Uri.https(baseUrl, '/price-lists'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class PriceListApi {
   Future<bool> updatePriceList(PriceList data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/price-lists'),
+        Uri.https(baseUrl, '/price-lists'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class PriceListApi {
   Future<bool> deletePriceList(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/price-lists/$id'),
+        Uri.https(baseUrl, '/price-lists/$id'),
         headers: {'token': token},
       );
 

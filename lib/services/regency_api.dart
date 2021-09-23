@@ -12,7 +12,7 @@ class RegencyApi {
   Future<List<Regency>> getRegencies() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/regencies'),
+        Uri.https(baseUrl, '/regencies'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class RegencyApi {
   Future<List<Regency>> findRegency(String code) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/regencies/$code'),
+        Uri.https(baseUrl, '/regencies/$code'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class RegencyApi {
   Future<List<Regency>> findRegencyBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/regencies/$key/$value'),
+        Uri.https(baseUrl, '/regencies/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {

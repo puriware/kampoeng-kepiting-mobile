@@ -12,7 +12,7 @@ class RedeemApi {
   Future<List<Redeem>> getRedeems() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/redeems'),
+        Uri.https(baseUrl, '/redeems'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class RedeemApi {
   Future<List<Redeem>> findRedeem(String code) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/redeems/$code'),
+        Uri.https(baseUrl, '/redeems/$code'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class RedeemApi {
   Future<List<Redeem>> findRedeemBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/redeems/$key/$value'),
+        Uri.https(baseUrl, '/redeems/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class RedeemApi {
   Future<String?> createRedeem(Redeem data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/redeems'),
+        Uri.https(baseUrl, '/redeems'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class RedeemApi {
   Future<bool> updateRedeem(Redeem data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/redeems'),
+        Uri.https(baseUrl, '/redeems'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class RedeemApi {
   Future<bool> deleteRedeem(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/redeems/$id'),
+        Uri.https(baseUrl, '/redeems/$id'),
         headers: {'token': token},
       );
 

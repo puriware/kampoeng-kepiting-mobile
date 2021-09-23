@@ -12,7 +12,7 @@ class ProvinceApi {
   Future<List<Province>> getProvinces() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/provinces'),
+        Uri.https(baseUrl, '/provinces'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class ProvinceApi {
   Future<List<Province>> findProvince(String code) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/provinces/$code'),
+        Uri.https(baseUrl, '/provinces/$code'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class ProvinceApi {
   Future<List<Province>> findProvinceBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/provinces/$key/$value'),
+        Uri.https(baseUrl, '/provinces/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {

@@ -12,7 +12,7 @@ class UserApi {
   Future<List<User>> getUsers() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/users'),
+        Uri.https(baseUrl, '/users'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class UserApi {
   Future<User?> findUser(String email) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/users/$email'),
+        Uri.https(baseUrl, '/users/$email'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class UserApi {
   Future<List<User>> findUserBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/users/$key/$value'),
+        Uri.https(baseUrl, '/users/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class UserApi {
   Future<String?> createUser(User data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/users'),
+        Uri.https(baseUrl, '/users'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class UserApi {
   Future<bool> updateUser(User data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/users'),
+        Uri.https(baseUrl, '/users'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class UserApi {
   Future<bool> deleteUser(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/users/$id'),
+        Uri.https(baseUrl, '/users/$id'),
         headers: {'token': token},
       );
 

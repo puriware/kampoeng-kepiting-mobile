@@ -12,7 +12,7 @@ class ProductApi {
   Future<List<Product>> getProducts() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/products'),
+        Uri.https(baseUrl, '/products'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class ProductApi {
   Future<List<Product>> findProduct(String code) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/products/$code'),
+        Uri.https(baseUrl, '/products/$code'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class ProductApi {
   Future<List<Product>> findProductBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/products/$key/$value'),
+        Uri.https(baseUrl, '/products/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class ProductApi {
   Future<String?> createProduct(Product data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/products'),
+        Uri.https(baseUrl, '/products'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class ProductApi {
   Future<bool> updateProduct(Product data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/products'),
+        Uri.https(baseUrl, '/products'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class ProductApi {
   Future<bool> deleteProduct(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/products/$id'),
+        Uri.https(baseUrl, '/products/$id'),
         headers: {'token': token},
       );
 

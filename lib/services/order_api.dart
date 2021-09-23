@@ -12,7 +12,7 @@ class OrderApi {
   Future<List<Order>> getOrders() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/orders'),
+        Uri.https(baseUrl, '/orders'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class OrderApi {
   Future<List<Order>> findOrder(String id) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/orders/$id'),
+        Uri.https(baseUrl, '/orders/$id'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class OrderApi {
   Future<List<Order>> findOrderBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/orders/$key/$value'),
+        Uri.https(baseUrl, '/orders/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -75,7 +75,7 @@ class OrderApi {
   Future<String?> createOrder(Order data) async {
     try {
       final response = await client.post(
-        Uri.http(baseUrl, '/orders'),
+        Uri.https(baseUrl, '/orders'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -98,7 +98,7 @@ class OrderApi {
   Future<bool> updateOrder(Order data) async {
     try {
       final response = await client.put(
-        Uri.http(baseUrl, '/orders'),
+        Uri.https(baseUrl, '/orders'),
         headers: {
           'content-type': 'application/json',
           'token': token,
@@ -119,7 +119,7 @@ class OrderApi {
   Future<bool> deleteOrder(int id) async {
     try {
       final response = await client.delete(
-        Uri.http(baseUrl, '/orders/$id'),
+        Uri.https(baseUrl, '/orders/$id'),
         headers: {'token': token},
       );
 

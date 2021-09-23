@@ -12,7 +12,7 @@ class DistrictApi {
   Future<List<District>> getDistricts() async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/districts'),
+        Uri.https(baseUrl, '/districts'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -33,7 +33,7 @@ class DistrictApi {
   Future<List<District>> findDistrict(String code) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/districts/$code'),
+        Uri.https(baseUrl, '/districts/$code'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class DistrictApi {
   Future<List<District>> findDistrictBy(String key, String value) async {
     try {
       final response = await client.get(
-        Uri.http(baseUrl, '/districts/$key/$value'),
+        Uri.https(baseUrl, '/districts/$key/$value'),
         headers: {'token': token},
       );
       if (response.statusCode == 200) {
