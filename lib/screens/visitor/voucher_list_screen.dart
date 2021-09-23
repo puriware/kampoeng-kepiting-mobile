@@ -107,14 +107,17 @@ class _VoucherListScreenState extends State<VoucherListScreen> {
                             (voucherList.length - idx).toString(),
                           ), // Icon(Icons.qr_code),
                         ),
-                        title: Text(
-                          convertToTitleCase(
-                            Provider.of<Products>(context, listen: false)
-                                .getProductById(order.idProduct)!
-                                .name
-                                .toString(),
+                        title: FittedBox(
+                          child: Text(
+                            convertToTitleCase(
+                              Provider.of<Products>(context, listen: false)
+                                  .getProductById(order.idProduct)!
+                                  .name
+                                  .toString()
+                                  .trim(),
+                            ),
+                            style: Theme.of(context).textTheme.headline6,
                           ),
-                          style: Theme.of(context).textTheme.headline6,
                         ),
                         subtitle: Text(
                             '${order.remaining} from ${order.quantity} voucher available'),

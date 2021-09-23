@@ -49,14 +49,28 @@ class PriceLists with ChangeNotifier {
 
   double? getMinimumProductPriceById(
     int productId,
+    String userType,
   ) {
     final result = _priceLists
         .where(
-          (prodList) => prodList.idProduct == productId,
+          (prodList) =>
+              prodList.idProduct == productId &&
+              prodList.orderType.toLowerCase() == userType,
         )
         .toList();
     result.sort((listA, listB) => listA.price.compareTo(listB.price));
     if (result.isNotEmpty) return result[0].price;
+  }
+
+  double getProductPrice(int prodId, String userType, int order) {
+    var price = 0.0;
+    final result = _priceLists.firstWhereOrNull((pl) =>
+        pl.idProduct == prodId &&
+        pl.orderType.toLowerCase() == userType.toLowerCase() &&
+        pl.minPax <= order &&
+        pl.maxPax >= order);
+    price = result != null ? result.price : 0.0;
+    return price;
   }
 
   Future<String> addPriceList(PriceList data) async {

@@ -8,6 +8,7 @@ class User {
   String phone;
   String password;
   String level;
+  String jenisUser;
   String picture;
   DateTime? created;
   DateTime? updated;
@@ -20,6 +21,7 @@ class User {
     required this.phone,
     required this.password,
     required this.level,
+    this.jenisUser = 'Individu',
     this.picture = '',
     this.created,
     this.updated,
@@ -34,7 +36,8 @@ class User {
       phone: map["phone"],
       password: map["password"],
       level: map["level"],
-      picture: map["picture"],
+      jenisUser: map["jenisuser"],
+      picture: map["picture"] ?? '',
       created: map["created"] != null
           ? DateTime.parse(map["created"].toString())
           : null,
@@ -53,14 +56,15 @@ class User {
       "phone": phone,
       "password": password,
       "level": level,
-      "created": created,
-      "updated": updated,
+      "jenisuser": jenisUser,
+      "created": created != null ? created!.toIso8601String() : null,
+      "updated": updated != null ? updated!.toIso8601String() : null,
     };
   }
 
   @override
   String toString() {
-    return 'User{id: $id, firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password, level: $level, created: $created, updated: $updated}';
+    return 'User{id: $id, firstname: $firstname, lastname: $lastname, email: $email, phone: $phone, password: $password, level: $level, jenisuser: $jenisUser, created: $created, updated: $updated}';
   }
 
   static List<User> userFromJson(String jsonData) {

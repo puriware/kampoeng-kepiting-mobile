@@ -196,7 +196,7 @@ class _AuthCardState extends State<AuthCard> {
                     prefixIcon: Icon(
                       Icons.alternate_email_rounded,
                     ),
-                    hintText: 'Enter your email address',
+                    hintText: 'Enter your e-mail address',
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {

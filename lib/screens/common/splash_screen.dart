@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
       child: Center(
         child: Container(
           width: deviceSize.width * 0.60,
-          child: Image.asset('assets/images/knwt.png'),
+          child: Image.asset('assets/images/kampoeng_kepiting_icon.png'),
         ),
       ),
     );

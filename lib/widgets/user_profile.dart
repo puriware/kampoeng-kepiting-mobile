@@ -22,7 +22,7 @@ class UserProfile extends StatelessWidget {
         leading: CircleAvatar(
           child: userData.picture.isEmpty
               ? Icon(
-                  Icons.person,
+                  Icons.person_rounded,
                 )
               : ClipOval(
                   child: Image.network(
@@ -40,13 +40,15 @@ class UserProfile extends StatelessWidget {
               .copyWith(color: Colors.white),
         ),
         subtitle: Text(
-          userData.email,
+          convertToTitleCase(
+            userData.level == 'Customer' ? userData.jenisUser : userData.level,
+          ),
           style: TextStyle(
             color: Colors.white,
           ),
         ),
         trailing: Text(
-          userData.level == 'userData' ? '$totalVoucher Voucher' : '',
+          userData.level == 'Customer' ? '$totalVoucher Voucher' : '',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

@@ -2,8 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
-import 'package:kampoeng_kepiting_mobile/models/order_detail.dart';
-import 'package:kampoeng_kepiting_mobile/models/product.dart';
 import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
 import 'package:kampoeng_kepiting_mobile/providers/products.dart';
 import 'package:kampoeng_kepiting_mobile/services/order_detail_api.dart';
@@ -87,7 +85,7 @@ class _ProductWeeklyPieChartState extends State<ProductWeeklyPieChart> {
             child: CircularProgressIndicator(),
           )
         : AspectRatio(
-            aspectRatio: (11 - _destinationName.length) / 7,
+            aspectRatio: (10 - _destinationName.length) / 8,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
               decoration: BoxDecoration(

@@ -11,6 +11,9 @@ class Order {
   int? verifiedBy;
   DateTime? created;
   DateTime? updated;
+  DateTime? confirmDate;
+  DateTime? voucherDate;
+  String? bankName;
 
   Order({
     this.id = 0,
@@ -23,6 +26,9 @@ class Order {
     this.verifiedBy,
     this.created,
     this.updated,
+    this.confirmDate,
+    this.voucherDate,
+    this.bankName,
   });
 
   factory Order.fromJson(Map<String, dynamic> map) {
@@ -41,6 +47,13 @@ class Order {
       updated: map["updated"] != null
           ? DateTime.parse(map["updated"].toString())
           : null,
+      confirmDate: map["confirmdate"] != null
+          ? DateTime.parse(map["confirmdate"].toString())
+          : null,
+      voucherDate: map["voucherdate"] != null
+          ? DateTime.parse(map["voucherdate"].toString())
+          : null,
+      bankName: map["bankname"],
     );
   }
 
@@ -54,14 +67,17 @@ class Order {
       "grandTotal": grandTotal,
       "status": status,
       "verifiedBy": verifiedBy,
-      "created": created,
+      "created": created != null ? created!.toIso8601String() : null,
       "updated": updated,
+      "confirmdate": confirmDate,
+      "voucherdate": voucherDate,
+      "bankname": bankName
     };
   }
 
   @override
   String toString() {
-    return 'Order{id: $id, bookingCode: $bookingCode, id_customer: $idCustomer, total: $total, disc: $disc, grandTotal: $grandTotal, status: $status, verifiedBy: $verifiedBy, created: $created, updated: $updated}';
+    return 'Order{id: $id, bookingCode: $bookingCode, id_customer: $idCustomer, total: $total, disc: $disc, grandTotal: $grandTotal, status: $status, verifiedBy: $verifiedBy, created: $created, updated: $updated, confirmdate: $confirmDate, voucherdate: $voucherDate, bankname: $bankName}';
   }
 
   static List<Order> orderFromJson(String jsonData) {

@@ -75,19 +75,10 @@ class OfficerHomeScreen extends StatelessWidget {
                     SizedBox(height: medium),
                     WeeklyChart(),
                     SizedBox(height: medium),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        buildInfoTextWithPercentage(
-                          percentage: percentageFromLastWeek.toStringAsFixed(2),
-                          title: "From Last Week",
-                        ),
-                        buildInfoTextWithPercentage(
-                          percentage: "9.43",
-                          title: "Recovery Rate",
-                        ),
-                      ],
-                    )
+                    buildInfoTextWithPercentage(
+                      percentage: percentageFromLastWeek.toStringAsFixed(2),
+                      title: "From Last Week",
+                    ),
                   ],
                 ),
               ),

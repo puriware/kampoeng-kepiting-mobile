@@ -33,6 +33,10 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  int get orderCount {
+    return _orders.length;
+  }
+
   Order? getOrderById(
     int id,
   ) {

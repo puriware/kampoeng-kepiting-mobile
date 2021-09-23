@@ -3,9 +3,9 @@ import 'package:kampoeng_kepiting_mobile/models/order.dart';
 import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
 import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
 import 'package:kampoeng_kepiting_mobile/providers/orders.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/cart_list.dart';
 import 'package:kampoeng_kepiting_mobile/widgets/message_dialog.dart';
 import '../../constants.dart';
-import '../../widgets/cart_item.dart';
 import 'package:provider/provider.dart';
 
 class ShopScreen extends StatelessWidget {
@@ -22,9 +22,9 @@ class ShopScreen extends StatelessWidget {
         child: Column(
           children: [
             Card(
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.circular(large),
-              // ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(large),
+              ),
               margin: EdgeInsets.all(large),
               child: ListTile(
                 leading: CircleAvatar(
@@ -46,15 +46,12 @@ class ShopScreen extends StatelessWidget {
               height: medium,
             ),
             Text(
-              cart.itemCount > 0 ? 'Shopping Cart' : 'Shopping Cart is Empty',
+              cart.itemCount > 0
+                  ? 'Shopping Cart List'
+                  : 'Shopping Cart is Empty',
             ),
             Expanded(
-              child: ListView.builder(
-                itemBuilder: (ctx, index) => CartItem(
-                  cart.items[index].id,
-                ),
-                itemCount: cart.items.length,
-              ),
+              child: CartList(cart.items),
             ),
           ],
         ),
@@ -94,14 +91,13 @@ class _OrderButtonState extends State<OrderButton> {
                 _isLoading = true;
               });
               try {
-                await Provider.of<OrderDetails>(context, listen: false)
-                    .fetchAndSetOrderDetails(userId: userId);
                 final newOrder = Order(
                   idCustomer: userId,
                   total: cart.totalAmount,
                   disc: 0.0,
                   grandTotal: cart.totalAmount,
                   status: 'Belum Dibayar',
+                  created: DateTime.now(),
                 );
                 final newOrderID =
                     await Provider.of<Orders>(context, listen: false)
@@ -139,7 +135,7 @@ class _OrderButtonState extends State<OrderButton> {
             },
       child: _isLoading
           ? CircularProgressIndicator(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
             )
           : Text('ORDER NOW'),
     );

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
+import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
 import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
 import 'package:kampoeng_kepiting_mobile/widgets/user_profile.dart';
-import '../../providers/auth.dart';
 import '../../screens/visitor/product_detail_screen.dart';
 import '../../constants.dart';
 import '../../providers/products.dart';
@@ -15,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context).products;
+    final userActive = Provider.of<Auth>(context, listen: false).activeUser;
     return Scaffold(
       appBar: AppBar(
         title: Text(appName),
@@ -42,9 +42,14 @@ class HomeScreen extends StatelessWidget {
                   child: GridTile(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed(
-                          ProductDetailScreen.routeName,
-                          arguments: [products[i].id, changePage],
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailScreen(
+                              products[i].id,
+                              openShop: changePage,
+                            ),
+                          ),
                         );
                       },
                       child: Container(
@@ -82,6 +87,7 @@ class HomeScreen extends StatelessWidget {
                                               listen: false)
                                           .getMinimumProductPriceById(
                                         products[i].id,
+                                        userActive!.jenisUser.toLowerCase(),
                                       ),
                                     ),
                                     style: TextStyle(color: primaryColor),

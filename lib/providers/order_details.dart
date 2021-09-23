@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
+import 'package:kampoeng_kepiting_mobile/providers/price_lists.dart';
+import 'package:provider/provider.dart';
 import '../models/order_detail.dart';
 import '../services/order_detail_api.dart';
 
@@ -56,6 +58,16 @@ class OrderDetails with ChangeNotifier {
       (orderDetail) => orderDetail.id == id,
     );
     return result;
+  }
+
+  List<OrderDetail>? getOrderDetailByOrderId(
+    int id,
+  ) {
+    return _orderDetails
+        .where(
+          (orderDetail) => orderDetail.orderId == id,
+        )
+        .toList();
   }
 
   OrderDetail? getOrderDetailByVoucherCode(
@@ -155,26 +167,21 @@ class OrderDetails with ChangeNotifier {
     return result;
   }
 
-  Future<void> createItem(OrderDetail data) async {
-    try {
-      final newID = await _orderDetailApi.createOrderDetail(data);
-      if (newID != null) {
-        data.id = int.parse(newID);
-        _orderDetails.insert(0, data);
-        notifyListeners();
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> addItem(OrderDetail data) async {
+  Future<void> addItem(
+    OrderDetail data,
+    BuildContext ctx,
+  ) async {
     final indexProduct = items.indexWhere((orderDetail) =>
+        orderDetail.orderId == null &&
         orderDetail.idProduct == data.idProduct &&
-        orderDetail.orderType == data.orderType);
+        orderDetail.orderType == data.orderType &&
+        orderDetail.userId == data.userId);
     if (indexProduct >= 0) {
       final selectedProduct = items[indexProduct];
       selectedProduct.quantity += data.quantity;
+      selectedProduct.price = Provider.of<PriceLists>(ctx, listen: false)
+          .getProductPrice(
+              data.idProduct, data.orderType, selectedProduct.quantity);
       try {
         final isSuccess =
             await _orderDetailApi.updateOrderDetail(selectedProduct);
@@ -190,33 +197,21 @@ class OrderDetails with ChangeNotifier {
     }
   }
 
-  Future<String> deleteItem(int id) async {
-    var result = 'Successfully deleted data';
-    final orderDetailIndex =
-        items.indexWhere((orderDetail) => orderDetail.id == id);
-
-    if (orderDetailIndex >= 0) {
-      try {
-        final isSuccess = await _orderDetailApi.deleteOrderDetail(id);
-        if (isSuccess) {
-          items.removeAt(orderDetailIndex);
-          notifyListeners();
-        }
-      } catch (error) {
-        throw error;
-      }
-    } else {
-      result = 'Failed to delete data. Data not found.';
-    }
-    return result;
-  }
-
-  Future<void> addSingleItem(int productId, String orderType) async {
+  Future<void> addSingleItem(
+    int userId,
+    int productId,
+    String orderType,
+    BuildContext ctx,
+  ) async {
     final indexProduct = items.indexWhere((element) =>
-        element.idProduct == productId && element.orderType == orderType);
+        element.userId == userId &&
+        element.idProduct == productId &&
+        element.orderType == orderType);
     if (indexProduct < 0) return;
     final selectedProduct = items[indexProduct];
     selectedProduct.quantity += 1;
+    selectedProduct.price = Provider.of<PriceLists>(ctx, listen: false)
+        .getProductPrice(productId, orderType, selectedProduct.quantity);
     try {
       final isSuccess =
           await _orderDetailApi.updateOrderDetail(selectedProduct);
@@ -231,15 +226,20 @@ class OrderDetails with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> removeSingleItem(int productId, String orderType,
+  Future<void> removeSingleItem(
+      int userId, int productId, String orderType, BuildContext ctx,
       {int? number}) async {
     final indexProduct = items.indexWhere((element) =>
-        element.idProduct == productId && element.orderType == orderType);
+        element.userId == userId &&
+        element.idProduct == productId &&
+        element.orderType == orderType);
     if (indexProduct < 0) return;
-    final selectedProduct = items[indexProduct];
+    final selectedProduct = _orderDetails[indexProduct];
     final value = number ?? 1;
     if (selectedProduct.quantity > value) {
       selectedProduct.quantity -= value;
+      selectedProduct.price = Provider.of<PriceLists>(ctx, listen: false)
+          .getProductPrice(productId, orderType, selectedProduct.quantity);
       try {
         final isSuccess =
             await _orderDetailApi.updateOrderDetail(selectedProduct);
@@ -251,7 +251,7 @@ class OrderDetails with ChangeNotifier {
         throw error;
       }
     } else {
-      await deleteItem(selectedProduct.id);
+      await deleteOrderDetail(selectedProduct.id);
     }
 
     notifyListeners();

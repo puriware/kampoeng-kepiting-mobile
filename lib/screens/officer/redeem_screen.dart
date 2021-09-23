@@ -117,7 +117,12 @@ class _RedeemScreenState extends State<RedeemScreen> {
                           FittedBox(
                             child: Text(
                               convertToTitleCase(
-                                productName,
+                                productName.toString().trim().length > 20
+                                    ? productName
+                                        .toString()
+                                        .trim()
+                                        .substring(0, 20)
+                                    : productName.toString().trim(),
                               ),
                             ),
                           ),
@@ -137,7 +142,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: IconButton(
@@ -175,7 +180,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: IconButton(

@@ -23,7 +23,7 @@ class _ToggleButtonsCreationState extends State<ToggleButtonsCreation> {
             width: constraints.maxWidth / widget.listText.length - 2,
           ),
           borderRadius: BorderRadius.circular(16),
-          fillColor: Theme.of(context).accentColor,
+          fillColor: Theme.of(context).colorScheme.secondary,
           children: widget.listText
               .map(
                 (item) => Container(

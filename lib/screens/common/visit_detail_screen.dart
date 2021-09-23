@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kampoeng_kepiting_mobile/constants.dart';
+import 'package:kampoeng_kepiting_mobile/providers/auth.dart';
 import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
 import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
 import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
@@ -18,18 +20,18 @@ class VisitDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final userActive = Provider.of<Auth>(context, listen: false).activeUser;
     final visitId = ModalRoute.of(context) != null
         ? ModalRoute.of(context)!.settings.arguments as int
         : -1;
     final visitData =
         Provider.of<Visits>(context, listen: false).getVisitById(visitId);
-    final userData = visitData != null
-        ? Provider.of<Users>(context, listen: false)
-            .getUserById(visitData.visitor)
+    final userData = visitData != null && userActive != null
+        ? visitData.visitor == userActive.id
+            ? userActive
+            : Provider.of<Users>(context, listen: false)
+                .getUserById(visitData.visitor)
         : null;
-    final proviceData = Provider.of<Provinces>(context, listen: false)
-        .getProvinceById(visitData!.province.toString());
-    print(proviceData);
 
     return Scaffold(
       appBar: AppBar(
@@ -147,33 +149,64 @@ class VisitDetailScreen extends StatelessWidget {
                     SizedBox(
                       height: large,
                     ),
-                    FutureBuilder(
-                        future: scanner.generateBarCode(visitData.visitCode),
-                        builder: (ctx, AsyncSnapshot<Uint8List> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting)
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          if (snapshot.hasData) {
-                            return Center(
-                              child: Container(
-                                height: deviceSize.width * 0.5,
-                                width: deviceSize.width * 0.5,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(32),
+                    Stack(children: [
+                      FutureBuilder(
+                          future: scanner.generateBarCode(visitData.visitCode),
+                          builder: (ctx, AsyncSnapshot<Uint8List> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting)
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            if (snapshot.hasData) {
+                              return Center(
+                                child: Container(
+                                  height: deviceSize.width * 0.5,
+                                  width: deviceSize.width * 0.5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(32),
+                                    ),
                                   ),
+                                  padding: EdgeInsets.all(large),
+                                  child: Image.memory(snapshot.data!),
                                 ),
-                                padding: EdgeInsets.all(large),
-                                child: Image.memory(snapshot.data!),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
+                      if (visitData.visitTime != null)
+                        Center(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: deviceSize.width * 0.5 / 3 + 20),
+                            transform: Matrix4.rotationZ(-45 * pi / 180)
+                              ..translate(-96.0),
+                            // ..translate(-10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 8,
+                                  color: Colors.black26,
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                            ),
+                            child: Text(
+                              'USED',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
+                                fontSize: 64,
+                                fontFamily: 'PTSerif',
+                                fontWeight: FontWeight.bold,
                               ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
+                            ),
+                          ),
+                        ),
+                    ]),
                   ],
                 ),
               ),

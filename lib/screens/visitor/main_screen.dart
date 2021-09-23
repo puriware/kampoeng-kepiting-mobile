@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
 import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
 import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/badge.dart';
 import '../../constants.dart';
 import '../../providers/auth.dart';
 import '../../providers/order_details.dart';
@@ -158,7 +159,15 @@ class _MainScreenState extends State<MainScreen> {
             inactiveColor: inactiveColor,
           ),
           BottomNavyBarItem(
-            icon: Icon(Icons.shopping_basket_rounded),
+            icon: Consumer<OrderDetails>(
+              builder: (_, cart, _child) => Badge(
+                child: _child!,
+                value: cart.itemCount.toString(),
+              ),
+              child: Icon(
+                Icons.shopping_basket_rounded,
+              ),
+            ),
             title: Text('Shop'),
             activeColor: primaryColor,
             inactiveColor: inactiveColor,

@@ -4,6 +4,8 @@ class PriceList {
   int id;
   int idProduct;
   String orderType;
+  int minPax;
+  int maxPax;
   double price;
   DateTime? created;
   DateTime? updated;
@@ -12,6 +14,8 @@ class PriceList {
     this.id = 0,
     required this.idProduct,
     required this.orderType,
+    this.minPax = 0,
+    this.maxPax = 100,
     required this.price,
     this.created,
     this.updated,
@@ -22,6 +26,8 @@ class PriceList {
       id: map["id"],
       idProduct: map["id_product"],
       orderType: map["orderType"],
+      minPax: map["minpax"],
+      maxPax: map["maxpax"],
       price: double.parse(
         map["price"].toString(),
       ),
@@ -43,6 +49,8 @@ class PriceList {
       "id": id,
       "id_product": idProduct,
       "orderType": orderType,
+      "minpax": minPax,
+      "maxpax": maxPax,
       "price": price,
       "created": created,
       "updated": updated,
@@ -51,7 +59,7 @@ class PriceList {
 
   @override
   String toString() {
-    return 'PriceList{id: $id, id_product: $idProduct, orderType: $orderType, price: $price, created: $created, updated: $updated}';
+    return 'PriceList{id: $id, id_product: $idProduct, orderType: $orderType, price: $price, created: $created, updated: $updated, minpax: $minPax, maxpax: $maxPax}';
   }
 
   static List<PriceList> priceListFromJson(String jsonData) {

@@ -9,6 +9,8 @@ import '../../models/user.dart';
 
 import '../constants.dart';
 
+enum AuthMode { Signup, Login }
+
 class Auth with ChangeNotifier {
   User? _activeUser;
   String? _token;
@@ -36,24 +38,73 @@ class Auth with ChangeNotifier {
   }
 
   Future<String> signIn(String email, String password) async {
+    return await _authenticate(email, password, AuthMode.Login);
+  }
+
+  Future<String> signUp(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String phone,
+  ) async {
+    return await _authenticate(
+      email,
+      password,
+      AuthMode.Signup,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+    );
+  }
+
+  Future<String> _authenticate(
+    String email,
+    String password,
+    AuthMode mode, {
+    String? firstName,
+    String? lastName,
+    String? phone,
+  }) async {
     var result = {
       'status': 'success',
       'message': 'Login Success',
     };
     try {
       final String baseUrl = apiUrl;
-      final urlLogin = Uri.http(baseUrl, '/auth/login');
-      final res = await http.post(
-        urlLogin,
-        body: {
-          'email': email,
-          'password': password,
-        },
+      final authUrl = Uri.http(
+        baseUrl,
+        mode == AuthMode.Login ? '/auth/login' : '/auth/register',
       );
+      http.Response res;
+      if (mode == AuthMode.Login) {
+        res = await http.post(
+          authUrl,
+          body: {
+            'email': email,
+            'password': password,
+          },
+        );
+      } else {
+        res = await http.post(
+          authUrl,
+          body: {
+            'email': email,
+            'password': password,
+            'firstname': firstName.toString(),
+            'lastname': lastName.toString(),
+            'phone': phone.toString(),
+            'level': 'Customer',
+            'jenisuser': 'Individu',
+          },
+        );
+      }
+
       if (res.statusCode == 200) {
         final body = jsonDecode(res.body);
         final jwt = body['token'];
         _activeUser = User.fromJson(body['values']);
+        if (_activeUser != null) _activeUser!.password = password;
         _token = jwt;
         _userApi = UserApi(_token!);
         _activeUser = await _userApi!.findUser(email);
