@@ -101,16 +101,18 @@ class _CartItemState extends State<CartItem> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            convertToTitleCase(
-                              product!.name.toString().trim().length > 25
-                                  ? product!.name
-                                      .toString()
-                                      .trim()
-                                      .substring(0, 25)
-                                  : product!.name.toString().trim(),
+                          FittedBox(
+                            child: Text(
+                              convertToTitleCase(product!.name.toString().trim()
+                                  // .length > 25
+                                  //     ? product!.name
+                                  //         .toString()
+                                  //         .trim()
+                                  //         .substring(0, 25)
+                                  //     : product!.name.toString().trim(),
+                                  ),
+                              style: Theme.of(context).textTheme.headline6,
                             ),
-                            style: Theme.of(context).textTheme.headline6,
                           ),
                           Row(
                             children: [

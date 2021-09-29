@@ -70,11 +70,11 @@ class HomeScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    products[i].name.toString().length > 15
+                                    products[i].name.toString().length > 20
                                         ? products[i]
                                             .name
                                             .toString()
-                                            .substring(0, 15)
+                                            .substring(0, 20)
                                         : products[i].name.toString(),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
