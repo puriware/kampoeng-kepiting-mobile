@@ -75,14 +75,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     });
     // Log user in
     try {
-      print(_authData);
       var result = '';
-      if (_authMode == AuthMode.Login)
+      if (_authMode == AuthMode.Login) {
         result = await Provider.of<Auth>(context, listen: false).signIn(
           _authData['email']!,
           _authData['password']!,
         );
-      else
+      } else {
         result = await Provider.of<Auth>(context, listen: false).signUp(
           _authData['email']!,
           _authData['password']!,
@@ -90,6 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           _authData['lastname']!,
           _authData['phone']!,
         );
+      }
       print(result);
       var loginResult = jsonDecode(result) as Map<String, dynamic>;
       var status = loginResult['status'];

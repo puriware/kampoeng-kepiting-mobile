@@ -132,7 +132,6 @@ class Auth with ChangeNotifier {
           await prefs.setString('userData', userData);
         }
       } else {
-        //print('No account was found matching that email and password');
         result = {
           'status': 'failed',
           'message': 'No account was found matching that email and password'
