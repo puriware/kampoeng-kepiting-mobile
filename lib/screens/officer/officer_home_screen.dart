@@ -17,6 +17,7 @@ class OfficerHomeScreen extends StatelessWidget {
         Provider.of<Visits>(context, listen: false).prevWeekTotalVisit;
     final percentageFromLastWeek =
         thisWeekTotalVisitor / lastWeekTotalVisitor * 100;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

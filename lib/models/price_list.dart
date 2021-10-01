@@ -52,8 +52,8 @@ class PriceList {
       "minpax": minPax,
       "maxpax": maxPax,
       "price": price,
-      "created": created,
-      "updated": updated,
+      "created": created != null ? created!.toIso8601String() : null,
+      "updated": updated != null ? updated!.toIso8601String() : null,
     };
   }
 

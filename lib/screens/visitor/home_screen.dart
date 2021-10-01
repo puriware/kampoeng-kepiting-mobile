@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                                         : products[i].name.toString(),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                   Text(

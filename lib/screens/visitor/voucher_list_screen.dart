@@ -131,7 +131,7 @@ class _VoucherListScreenState extends State<VoucherListScreen> {
                                     "Voucher QR Code",
                                     qrcode,
                                   );
-                                  _fetchVoucherData();
+                                  await _fetchVoucherData();
                                 },
                                 icon: Icon(
                                   Icons.qr_code,

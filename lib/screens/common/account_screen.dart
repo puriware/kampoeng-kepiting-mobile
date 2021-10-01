@@ -167,7 +167,10 @@ class AccountScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             ListTile(
-                              title: Text(setting.title),
+                              title: Text(
+                                setting.title,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
                               subtitle: Text(setting.subTitle),
                               trailing: IconButton(
                                 onPressed: () => setting.onPressed(),

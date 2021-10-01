@@ -87,10 +87,7 @@ class Visits with ChangeNotifier {
     var result = _visits
         .where(
           (vst) =>
-              vst.visitTime != null &&
-              vst.visitTime!.year == now.year &&
-              vst.visitTime!.month == now.month &&
-              vst.visitTime!.day == now.day,
+              vst.visitTime != null && vst.visitTime!.isAtSameMomentAs(now),
         )
         .toList();
     return result.length;
@@ -104,11 +101,7 @@ class Visits with ChangeNotifier {
     return [
       ..._visits
           .where(
-            (vst) =>
-                vst.visitTime != null &&
-                vst.visitTime!.year >= start.year &&
-                vst.visitTime!.month >= start.month &&
-                vst.visitTime!.day >= start.day,
+            (vst) => vst.visitTime != null && vst.visitTime!.isAfter(start),
           )
           .toList()
     ];
@@ -119,18 +112,14 @@ class Visits with ChangeNotifier {
     final today = DateTime(now.year, now.month, now.day);
     final weekday = today.weekday;
     final start = today.add(Duration(days: -(6 + weekday)));
-    final end = today.add(Duration(days: -weekday));
+    final end = today.add(Duration(days: -weekday + 1));
     return [
       ..._visits
           .where(
             (vst) =>
                 vst.visitTime != null &&
-                vst.visitTime!.year >= start.year &&
-                vst.visitTime!.month >= start.month &&
-                vst.visitTime!.day >= start.day &&
-                vst.visitTime!.year <= end.year &&
-                vst.visitTime!.month <= end.month &&
-                vst.visitTime!.day <= end.day,
+                vst.visitTime!.isAfter(start) &&
+                vst.visitTime!.isBefore(end),
           )
           .toList()
     ];

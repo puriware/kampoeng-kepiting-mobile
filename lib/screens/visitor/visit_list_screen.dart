@@ -110,7 +110,7 @@ class _VisitListScreenState extends State<VisitListScreen> {
       "Visit QR Code",
       qrcode,
     );
-    _fetchVisitData();
+    await _fetchVisitData();
   }
 
   @override
@@ -179,9 +179,12 @@ class _VisitListScreenState extends State<VisitListScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : _visitListView(
-              context,
-              _onlyTodays ? visitData.getTodaysVisit() : visitData.visits,
+          : RefreshIndicator(
+              onRefresh: _fetchVisitData,
+              child: _visitListView(
+                context,
+                _onlyTodays ? visitData.getTodaysVisit() : visitData.visits,
+              ),
             ),
     );
   }

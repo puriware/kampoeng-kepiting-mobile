@@ -33,7 +33,7 @@ class Redeem {
       "voucherCode": voucherCode,
       "quantity": quantity,
       "officer": officer,
-      "created": created,
+      "created": created != null ? created!.toIso8601String() : null,
     };
   }
 

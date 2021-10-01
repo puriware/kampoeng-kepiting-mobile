@@ -402,27 +402,27 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 SizedBox(
-                  height: medium,
+                  height: large,
                 ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.fastOutSlowIn,
-                  width: double.infinity,
-                  height: _authMode == AuthMode.Login ? 20 : 0,
-                  child: InkWell(
-                    child: Text(
-                      'Forgot password?',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        color: primaryDarkerColor,
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                ),
-                SizedBox(
-                  height: medium,
-                ),
+                // AnimatedContainer(
+                //   duration: const Duration(milliseconds: 500),
+                //   curve: Curves.fastOutSlowIn,
+                //   width: double.infinity,
+                //   height: _authMode == AuthMode.Login ? 20 : 0,
+                //   child: InkWell(
+                //     child: Text(
+                //       'Forgot password?',
+                //       textAlign: TextAlign.end,
+                //       style: TextStyle(
+                //         color: primaryDarkerColor,
+                //       ),
+                //     ),
+                //     onTap: () {},
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: medium,
+                // ),
                 if (_isLoading)
                   CircularProgressIndicator(
                     color: primaryColor,

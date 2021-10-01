@@ -69,8 +69,10 @@ class Order {
       "verifiedBy": verifiedBy,
       "created": created != null ? created!.toIso8601String() : null,
       "updated": updated,
-      "confirmdate": confirmDate,
-      "voucherdate": voucherDate,
+      "confirmdate":
+          confirmDate != null ? confirmDate!.toIso8601String() : null,
+      "voucherdate":
+          voucherDate != null ? voucherDate!.toIso8601String() : null,
       "bankname": bankName
     };
   }

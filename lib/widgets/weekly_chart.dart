@@ -6,9 +6,6 @@ import '../../providers/visits.dart';
 import 'package:provider/provider.dart';
 
 class WeeklyChart extends StatelessWidget {
-  final now = DateTime.now();
-  //List<Visit> thisWeekVisits = [];
-
   @override
   Widget build(BuildContext context) {
     final thisWeekVisits = Provider.of<Visits>(context).thisWeekVisits;
