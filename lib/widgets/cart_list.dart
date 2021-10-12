@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../models/order_detail.dart';
 import '../../providers/order_details.dart';
 import '../../widgets/cart_item.dart';
 import 'package:provider/provider.dart';
 
-class CartList extends StatefulWidget {
-  final List<OrderDetail> cart;
-  CartList(this.cart, {Key? key}) : super(key: key);
-
-  @override
-  _CartListState createState() => _CartListState();
-}
-
-class _CartListState extends State<CartList> {
-  List<OrderDetail> cartData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    cartData = widget.cart;
-  }
+class CartList extends StatelessWidget {
+  CartList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final cartData = Provider.of<OrderDetails>(context).items;
     return cartData.length > 0
         ? ListView.builder(
             itemCount: cartData.length,
@@ -78,9 +64,9 @@ class _CartListState extends State<CartList> {
                     ),
                   ),
                 );
-                setState(() {
-                  cartData.removeAt(idx);
-                });
+                // setState(() {
+                //   cartData.removeAt(idx);
+                // });
               },
               child: CartItem(cartData[idx].id),
             ),

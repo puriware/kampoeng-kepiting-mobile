@@ -83,14 +83,9 @@ class OrderDetailItem extends StatelessWidget {
                         children: [
                           FittedBox(
                             child: Text(
-                              convertToTitleCase(product.name.trim()
-                                  // .toString().trim().length > 25
-                                  //     ? product.name
-                                  //         .toString()
-                                  //         .trim()
-                                  //         .substring(0, 25)
-                                  //     : product.name.toString().trim(),
-                                  ),
+                              convertToTitleCase(
+                                product.name.trim(),
+                              ),
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ),

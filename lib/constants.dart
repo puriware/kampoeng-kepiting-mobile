@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import '../../models/product.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kampoeng_kepiting_mobile/models/payment.dart';
 
 // Colors
 const textColor = Color(0xFF343A40);
@@ -40,97 +40,6 @@ final String imageUrl = dotenv.env['IMAGE_URL'].toString();
 // STANDARD
 final currency = NumberFormat.simpleCurrency(locale: 'id_ID');
 
-final dataProducts = [
-  Product(
-    code: 'P001',
-    name: 'Tour Canoing',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/001.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P002',
-    name: 'Tour Mangrove',
-    description:
-        'Berupa tour keliling perairan teluk benoa menggunakan perahu traditional nelayan untuk mengantar tamu berkeliling menyisir pohon mangrove berwisata di teluk benoa. ',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/002.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P003',
-    name: 'Fishing Trip',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/003.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P004',
-    name: 'Wisata Budaya',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/004.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P005',
-    name: 'Tour Keramba Kepiting',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/005.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P006',
-    name: 'Mangrove Plantation',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/006.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P007',
-    name: 'Cooking Class',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/007.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-  Product(
-    code: 'P008',
-    name: 'Tour Canoing',
-    description:
-        'Mollit proident dolor non in nisi laboris. Eiusmod eu fugiat labore excepteur nisi aute mollit laboris irure. Ex proident mollit duis reprehenderit ipsum aliquip nisi id labore. Nulla commodo sit sint sint deserunt ullamco eiusmod id cillum enim dolor quis. Officia eu ullamco esse est eiusmod ipsum veniam qui.',
-    feature: 'feature',
-    price: 25000,
-    image: 'https://puriware.com/assets/ekowisata/001.jpg',
-    createBy: 1,
-    visibility: 'Visible',
-  ),
-];
-
 String convertToTitleCase(String text) {
   text = text.toLowerCase();
 
@@ -155,3 +64,29 @@ String convertToTitleCase(String text) {
   // Join/Merge all words back to one String
   return capitalizedWords.join(' ');
 }
+
+const PAYMENT = const [
+  Payment(
+    provider: 'Mandiri',
+    accountID: '1450010678908',
+    accountName: 'Agus Diana',
+    providerLogo: 'assets/icons/mandiri.svg',
+  ),
+  Payment(
+      provider: 'BNI',
+      accountID: '0107213000',
+      accountName: 'Agus Diana',
+      providerLogo: 'assets/icons/bni.svg'),
+  Payment(
+    provider: 'BCA',
+    accountID: '1461629518',
+    accountName: 'Agus Diana',
+    providerLogo: 'assets/icons/bca.svg',
+  ),
+  Payment(
+    provider: 'Paypal',
+    accountID: 'cybers_romeo@yahoo.com',
+    accountName: 'Agus Diana',
+    providerLogo: 'assets/icons/paypal.svg',
+  ),
+];

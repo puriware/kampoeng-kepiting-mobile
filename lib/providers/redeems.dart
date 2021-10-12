@@ -38,15 +38,24 @@ class Redeems with ChangeNotifier {
     int? officerId,
   }) {
     final now = DateTime.now();
-    return _redeems
-        .where(
-          (rdm) =>
-              rdm.created != null &&
-              rdm.created!.year == now.year &&
-              rdm.created!.month == now.month &&
-              rdm.created!.day == now.day,
-        )
-        .toList();
+    final dateNow = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    );
+    return _redeems.where(
+      (rdm) {
+        if (rdm.created != null) {
+          final createdDate = DateTime(
+            rdm.created!.year,
+            rdm.created!.month,
+            rdm.created!.day,
+          );
+          return createdDate.isAtSameMomentAs(dateNow);
+        }
+        return false;
+      },
+    ).toList();
   }
 
   Redeem? getRedeemById(

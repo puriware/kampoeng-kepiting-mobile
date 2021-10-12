@@ -1,6 +1,6 @@
-import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
@@ -149,7 +149,7 @@ class VisitDetailScreen extends StatelessWidget {
                     SizedBox(
                       height: large,
                     ),
-                    Stack(children: [
+                    Stack(alignment: AlignmentDirectional.center, children: [
                       FutureBuilder(
                           future: scanner.generateBarCode(visitData.visitCode),
                           builder: (ctx, AsyncSnapshot<Uint8List> snapshot) {
@@ -180,30 +180,9 @@ class VisitDetailScreen extends StatelessWidget {
                       if (visitData.visitTime != null)
                         Center(
                           child: Container(
-                            margin: EdgeInsets.only(
-                                top: deviceSize.width * 0.5 / 3 + 20),
-                            transform: Matrix4.rotationZ(-45 * pi / 180)
-                              ..translate(-96.0),
-                            // ..translate(-10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 8,
-                                  color: Colors.black26,
-                                  offset: Offset(0, 2),
-                                )
-                              ],
-                            ),
-                            child: Text(
-                              'USED',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: 64,
-                                fontFamily: 'PTSerif',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            height: deviceSize.width * 0.4,
+                            width: deviceSize.width * 0.4,
+                            child: Image.asset('assets/images/used.png'),
                           ),
                         ),
                     ]),

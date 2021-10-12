@@ -60,6 +60,21 @@ class OrderDetails with ChangeNotifier {
     return result;
   }
 
+  Future<void> fetchOrderDetailById(
+    int id,
+  ) async {
+    final index = _orderDetails.indexWhere(
+      (orderDetail) => orderDetail.id == id,
+    );
+    if (index >= 0) {
+      final updated = await _orderDetailApi.findOrderDetail(id.toString());
+      if (updated.isNotEmpty) {
+        _orderDetails[index] = updated[0];
+        notifyListeners();
+      }
+    }
+  }
+
   List<OrderDetail>? getOrderDetailByOrderId(
     int id,
   ) {

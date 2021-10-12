@@ -68,7 +68,7 @@ class Order {
       "status": status,
       "verifiedBy": verifiedBy,
       "created": created != null ? created!.toIso8601String() : null,
-      "updated": updated,
+      "updated": updated != null ? created!.toIso8601String() : null,
       "confirmdate":
           confirmDate != null ? confirmDate!.toIso8601String() : null,
       "voucherdate":

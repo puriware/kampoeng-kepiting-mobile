@@ -1,13 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/widgets/vouchers_group_list.dart';
 import '../../constants.dart';
 import '../../providers/auth.dart';
 import '../../providers/order_details.dart';
-import '../../providers/products.dart';
-import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 
 enum FilterOptions {
   Available,
@@ -92,62 +88,8 @@ class _VoucherListScreenState extends State<VoucherListScreen> {
           : RefreshIndicator(
               onRefresh: _fetchVoucherData,
               child: Padding(
-                padding: const EdgeInsets.all(medium),
-                child: ListView.builder(
-                  itemBuilder: (ctx, idx) {
-                    final order = voucherList![idx];
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(large),
-                      ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: primaryBackgrounColor,
-                          child: Text(
-                            (voucherList.length - idx).toString(),
-                          ), // Icon(Icons.qr_code),
-                        ),
-                        title: FittedBox(
-                          child: Text(
-                            convertToTitleCase(
-                              Provider.of<Products>(context, listen: false)
-                                  .getProductById(order.idProduct)!
-                                  .name
-                                  .toString()
-                                  .trim(),
-                            ),
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ),
-                        subtitle: Text(
-                            '${order.remaining} from ${order.quantity} voucher available'),
-                        trailing: order.remaining > 0
-                            ? IconButton(
-                                onPressed: () async {
-                                  Uint8List qrcode = await scanner
-                                      .generateBarCode(order.voucherCode!);
-                                  await MessageDialog.showQrDialog(
-                                    context,
-                                    "Voucher QR Code",
-                                    qrcode,
-                                  );
-                                  await _fetchVoucherData();
-                                },
-                                icon: Icon(
-                                  Icons.qr_code,
-                                  color: primaryColor,
-                                ),
-                              )
-                            : IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.qr_code),
-                              ),
-                        onTap: () {},
-                      ),
-                    );
-                  },
-                  itemCount: voucherList != null ? voucherList.length : 0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: large),
+                child: VouchersGroupList(voucherList),
               ),
             ),
     );

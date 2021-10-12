@@ -1,6 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 import '../../widgets/visit_item.dart';
 import '../../constants.dart';
 import '../../models/visit.dart';
@@ -10,7 +10,6 @@ import '../../widgets/message_dialog.dart';
 import '../../widgets/visit_entry_modal.dart';
 import 'package:nanoid/async.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 
 enum FilterOptions {
   Todays,
@@ -35,7 +34,6 @@ class _VisitListScreenState extends State<VisitListScreen> {
     super.didChangeDependencies();
     if (_isInit) {
       _userID = Provider.of<Auth>(context, listen: false).activeUser!.id;
-
       await _fetchVisitData();
       _isInit = false;
     }
@@ -103,20 +101,8 @@ class _VisitListScreenState extends State<VisitListScreen> {
     }
   }
 
-  _showVisitQr(String code) async {
-    Uint8List qrcode = await scanner.generateBarCode(code);
-    await MessageDialog.showQrDialog(
-      context,
-      "Visit QR Code",
-      qrcode,
-    );
-    await _fetchVisitData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final visitData = Provider.of<Visits>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Visit List'),
@@ -181,26 +167,49 @@ class _VisitListScreenState extends State<VisitListScreen> {
             )
           : RefreshIndicator(
               onRefresh: _fetchVisitData,
-              child: _visitListView(
-                context,
-                _onlyTodays ? visitData.getTodaysVisit() : visitData.visits,
-              ),
+              child: _visitListView(_onlyTodays),
             ),
     );
   }
 
-  Widget _visitListView(
-    BuildContext context,
-    List<Visit> visitData,
-  ) {
+  Widget _visitListView(bool onlyTodays) {
+    final visit = Provider.of<Visits>(context);
+    final visitData = onlyTodays ? visit.getTodaysVisit() : visit.visits;
     return Padding(
       padding: const EdgeInsets.all(medium),
-      child: ListView.builder(
-        itemBuilder: (ctx, idx) {
-          final visit = visitData[idx];
-          return VisitItem(visit, visitData.length - idx, _showVisitQr);
-        },
-        itemCount: visitData.length,
+      child: GroupedListView<Visit, String>(
+        elements: visitData,
+        groupBy: (visit) => visit.created!.toIso8601String().substring(0, 10),
+        floatingHeader: true,
+        useStickyGroupSeparators: true,
+        order: GroupedListOrder.DESC,
+        groupSeparatorBuilder: (String groupValue) => Container(
+          height: 50,
+          child: Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 120,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(small),
+                child: Text(
+                  '${DateFormat('dd MMM yyyy').format(DateTime.parse(groupValue))}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+        indexedItemBuilder: (ctx, visit, idx) => VisitItem(
+          visit.id,
+          visitData.length - idx,
+        ),
       ),
     );
   }

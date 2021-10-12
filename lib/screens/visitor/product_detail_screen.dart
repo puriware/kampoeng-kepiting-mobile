@@ -81,13 +81,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _product != null
-              ? convertToTitleCase(_product!.name)
-              : 'Product Detail',
-        ),
+        title: Text('Product Detail'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -157,7 +153,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           height: medium,
                         ),
                         Text(
-                          convertToTitleCase(_product!.name.trim()),
+                          _product!.name
+                              .trim(), //convertToTitleCase(_product!.name.trim()),
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         SizedBox(
@@ -239,56 +236,62 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               )),
                               VerticalDivider(),
                               Expanded(
-                                child: TextButton.icon(
-                                  onPressed: () async {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    final newCart = OrderDetail(
-                                      userId: _userID,
-                                      idProduct: _product!.id,
-                                      orderType: _userType,
-                                      quantity: _quantity,
-                                      price: _price > 0
-                                          ? _price
-                                          : _priceList[0].price,
-                                    );
-                                    await Provider.of<OrderDetails>(context,
-                                            listen: false)
-                                        .addItem(newCart, context);
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text('Added item to the cart!'),
-                                        duration: Duration(seconds: 2),
-                                        action: SnackBarAction(
-                                          label: 'UNDO',
-                                          onPressed: () {
-                                            Provider.of<OrderDetails>(context,
+                                child: Center(
+                                  child: _isLoading
+                                      ? CircularProgressIndicator()
+                                      : TextButton.icon(
+                                          onPressed: () async {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            final newCart = OrderDetail(
+                                              userId: _userID,
+                                              idProduct: _product!.id,
+                                              orderType: _userType,
+                                              quantity: _quantity,
+                                              price: _price > 0
+                                                  ? _price
+                                                  : _priceList[0].price,
+                                            );
+                                            await Provider.of<OrderDetails>(
+                                                    context,
                                                     listen: false)
-                                                .removeSingleItem(
-                                              _userID,
-                                              _product!.id,
-                                              _userType,
-                                              context,
-                                              number: _quantity,
+                                                .addItem(newCart, context);
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Added item to the cart!'),
+                                                duration: Duration(seconds: 2),
+                                                action: SnackBarAction(
+                                                  label: 'UNDO',
+                                                  onPressed: () {
+                                                    Provider.of<OrderDetails>(
+                                                            context,
+                                                            listen: false)
+                                                        .removeSingleItem(
+                                                      _userID,
+                                                      _product!.id,
+                                                      _userType,
+                                                      context,
+                                                      number: _quantity,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
                                             );
                                           },
+                                          icon: Icon(
+                                              Icons.shopping_basket_rounded),
+                                          label: Text('Add to Cart'),
+                                          style: TextButton.styleFrom(
+                                              primary: primaryColor),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icon(Icons.shopping_basket_rounded),
-                                  label: _isLoading
-                                      ? CircularProgressIndicator()
-                                      : Text('Add to Cart'),
-                                  style: TextButton.styleFrom(
-                                      primary: primaryColor),
                                 ),
                               ),
                             ],

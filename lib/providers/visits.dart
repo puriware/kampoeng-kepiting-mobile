@@ -41,6 +41,19 @@ class Visits with ChangeNotifier {
     return [..._visits];
   }
 
+  Future<void> fetchVisitById(int id) async {
+    final index = _visits.indexWhere(
+      (orderDetail) => orderDetail.id == id,
+    );
+    if (index >= 0) {
+      final updated = await _visitApi.findVisit(id);
+      if (updated.isNotEmpty) {
+        _visits[index] = updated[0];
+        notifyListeners();
+      }
+    }
+  }
+
   Visit? getVisitById(
     int id,
   ) {
@@ -61,13 +74,22 @@ class Visits with ChangeNotifier {
 
   List<Visit> getTodaysVisit({int? visitorId, int? officerId}) {
     final now = DateTime.now();
+    final dateNow = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    );
     var result = _visits
         .where(
           (vst) =>
               vst.created != null &&
-              vst.created!.year == now.year &&
-              vst.created!.month == now.month &&
-              vst.created!.day == now.day,
+              dateNow.isAtSameMomentAs(
+                DateTime(
+                  vst.created!.year,
+                  vst.created!.month,
+                  vst.created!.day,
+                ),
+              ),
         )
         .toList();
     if (result.length > 0) {
@@ -84,12 +106,24 @@ class Visits with ChangeNotifier {
 
   int get todaysTotalVisit {
     final now = DateTime.now();
-    var result = _visits
-        .where(
-          (vst) =>
-              vst.visitTime != null && vst.visitTime!.isAtSameMomentAs(now),
-        )
-        .toList();
+    final dateNow = DateTime(
+      now.year,
+      now.month,
+      now.day,
+    );
+    var result = _visits.where(
+      (vst) {
+        if (vst.visitTime != null) {
+          final visitDate = DateTime(
+            vst.visitTime!.year,
+            vst.visitTime!.month,
+            vst.visitTime!.day,
+          );
+          return visitDate.isAtSameMomentAs(dateNow);
+        }
+        return false;
+      },
+    ).toList();
     return result.length;
   }
 

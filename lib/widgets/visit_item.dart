@@ -1,85 +1,106 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kampoeng_kepiting_mobile/models/province.dart';
+import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
+import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
+import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
 import '../../constants.dart';
-import '../../models/visit.dart';
 import '../../providers/visits.dart';
 import '../../screens/common/visit_detail_screen.dart';
 import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
-class VisitItem extends StatefulWidget {
-  final Visit visitData;
+class VisitItem extends StatelessWidget {
+  final int visitId;
   final int visitNo;
-  final Function showVisitQr;
-  VisitItem(this.visitData, this.visitNo, this.showVisitQr, {Key? key})
-      : super(key: key);
-
-  @override
-  _VisitItemState createState() => _VisitItemState();
-}
-
-class _VisitItemState extends State<VisitItem> {
-  final now = DateTime.now();
-
-  Future<void> _deleteVisit(int visitId) async {
-    await Provider.of<Visits>(context, listen: false).deleteVisit(visitId);
-  }
+  VisitItem(this.visitId, this.visitNo, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final visit = widget.visitData;
-    final visitDate = DateTime(
-      visit.created!.year,
-      visit.created!.month,
-      visit.created!.day,
-    );
-
-    final today = DateTime(now.year, now.month, now.day);
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(large),
-      ),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: primaryBackgrounColor,
-          child: Text((widget.visitNo).toString()), // Icon(Icons.qr_code),
-        ),
-        title: Text(
-          DateFormat('dd MMMM yyyy').format(visit.created!),
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        subtitle: Text(visit.region),
-        trailing: visitDate.isAtSameMomentAs(today) && visit.visitTime == null
-            ? IconButton(
-                onPressed: () => widget.showVisitQr(visit.visitCode),
-                icon: Icon(
-                  Icons.qr_code,
-                  color: primaryColor,
-                ),
-              )
-            : IconButton(
-                onPressed: null,
-                icon: Icon(Icons.qr_code),
-              ),
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            VisitDetailScreen.routeName,
-            arguments: visit.id,
+    return Consumer<Visits>(
+      builder: (ctx, vst, _) {
+        final visit = vst.getVisitById(visitId);
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        if (visit != null) {
+          final createdDate = DateTime(
+            visit.created!.year,
+            visit.created!.month,
+            visit.created!.day,
           );
-        },
-        onLongPress: () async {
-          if (visit.visitTime == null)
-            MessageDialog.showMessageDialog(
-              context,
-              'Delete Visit Data',
-              'Are you sure to delete visit data ${visit.region}',
-              'Sure',
-              _deleteVisit,
-              args: visit.id,
-            );
-        },
-      ),
+          final regency = visit.regency != null
+              ? Provider.of<Regencies>(context)
+                  .getRegencyById(visit.regency!)!
+                  .name
+              : '';
+          return Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(large),
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: primaryBackgrounColor,
+                child: Text((visitNo).toString()), // Icon(Icons.qr_code),
+              ),
+              title: Text(
+                //DateFormat('dd MMMM yyyy').format(visit.created!),
+                visit.region,
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              subtitle: Text(regency),
+              trailing:
+                  createdDate.isAtSameMomentAs(today) && visit.visitTime == null
+                      ? IconButton(
+                          onPressed: () async {
+                            Uint8List qrcode =
+                                await scanner.generateBarCode(visit.visitCode);
+                            await MessageDialog.showQrDialog(
+                              context,
+                              "Visit QR Code",
+                              qrcode,
+                            );
+                            await Provider.of<Visits>(context, listen: false)
+                                .fetchVisitById(visitId);
+                          },
+                          icon: Icon(
+                            Icons.qr_code,
+                            color: primaryColor,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: null,
+                          icon: Icon(Icons.qr_code),
+                        ),
+              onTap: () async {
+                await Navigator.of(context).pushNamed(
+                  VisitDetailScreen.routeName,
+                  arguments: visit.id,
+                );
+                await Provider.of<Visits>(context, listen: false)
+                    .fetchVisitById(visitId);
+              },
+              onLongPress: () async {
+                if (visit.visitTime == null)
+                  MessageDialog.showMessageDialog(
+                    context,
+                    'Delete Visit Data',
+                    'Are you sure to delete visit data ${visit.region}',
+                    'Sure',
+                    () async {
+                      await Provider.of<Visits>(context, listen: false)
+                          .deleteVisit(visitId);
+                    },
+                  );
+              },
+            ),
+          );
+        } else
+          return Container();
+      },
     );
   }
 }

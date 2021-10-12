@@ -84,7 +84,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             Navigator.of(context).pop();
           },

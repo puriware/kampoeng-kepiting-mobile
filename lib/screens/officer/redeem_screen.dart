@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/services/order_detail_api.dart';
 import '../../constants.dart';
 import '../../models/redeem.dart';
 import '../../models/user.dart';
@@ -28,32 +29,37 @@ class _RedeemScreenState extends State<RedeemScreen> {
   var _isInit = true;
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    if (_isInit) {
-      try {
-        _officerAccount = Provider.of<Auth>(context, listen: false).activeUser;
-        await _fetchRedeemData();
-      } catch (err) {
-        MessageDialog.showPopUpMessage(
-          context,
-          'Error',
-          err.toString(),
-        );
-      }
-      _isInit = false;
-    }
+  void initState() {
+    super.initState();
+    _officerAccount = Provider.of<Auth>(context, listen: false).activeUser;
   }
 
-  Future _fetchRedeemData() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await Provider.of<Redeems>(context, listen: false).fetchAndSetRedeems();
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  // @override
+  // void didChangeDependencies() async {
+  //   super.didChangeDependencies();
+  //   if (_isInit) {
+  //     try {
+  //       await _fetchRedeemData();
+  //     } catch (err) {
+  //       MessageDialog.showPopUpMessage(
+  //         context,
+  //         'Error',
+  //         err.toString(),
+  //       );
+  //     }
+  //     _isInit = false;
+  //   }
+  // }
+
+  // Future _fetchRedeemData() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   await Provider.of<Redeems>(context, listen: false).fetchAndSetRedeems();
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
 
   void _scan() async {
     await Permission.camera.request();
@@ -72,6 +78,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
     String productName,
     String visitorName,
     String totalVoucher,
+    String voucherCode,
   ) async {
     final initialAvailableVoucher = ctrl.text;
     final initialValue = int.parse(initialAvailableVoucher);
@@ -84,6 +91,9 @@ class _RedeemScreenState extends State<RedeemScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Center(
+                child: Text('Voucher Code: $voucherCode'),
+              ),
               Card(
                 elevation: small,
                 // shape: RoundedRectangleBorder(
@@ -221,20 +231,27 @@ class _RedeemScreenState extends State<RedeemScreen> {
   _redeemVoucher(String? voucherCode) async {
     if (voucherCode != null) {
       try {
-        final orderData = Provider.of<OrderDetails>(context, listen: false)
-            .getOrderDetailByVoucherCode(voucherCode);
-        if (orderData != null) {
+        OrderDetailApi api = OrderDetailApi(
+          Provider.of<Auth>(context, listen: false).token.toString(),
+        );
+        // final orderData = Provider.of<OrderDetails>(context, listen: false)
+        //     .getOrderDetailByVoucherCode(voucherCode);
+        final orderData =
+            await api.findOrderDetailBy('voucherCode', voucherCode);
+        if (orderData.isNotEmpty) {
+          final order = orderData[0];
           final product = Provider.of<Products>(context, listen: false)
-              .getProductById(orderData.idProduct);
+              .getProductById(order.idProduct);
           final visitor = Provider.of<Users>(context, listen: false)
-              .getUserById(orderData.userId);
-          _ctrlRedeemVoucher.text = orderData.remaining.toString();
+              .getUserById(order.userId);
+          _ctrlRedeemVoucher.text = order.remaining.toString();
           await _showRedeemVoucherDialog(
             context,
             _ctrlRedeemVoucher,
             product!.name,
             '${visitor!.firstname} ${visitor.lastname}',
-            orderData.quantity.toString(),
+            order.quantity.toString(),
+            voucherCode,
           );
           if (_ctrlRedeemVoucher.text.isNotEmpty && _officerAccount != null) {
             final quantity = int.parse(_ctrlRedeemVoucher.text.trim());
@@ -246,7 +263,6 @@ class _RedeemScreenState extends State<RedeemScreen> {
             final result = await Provider.of<Redeems>(context, listen: false)
                 .addRedeem(newRedeem);
 
-            //if (result.toLowerCase().contains('success')) _fetchRedeemData();
             MessageDialog.showPopUpMessage(
               context,
               'Redeem Voucher',
@@ -272,9 +288,6 @@ class _RedeemScreenState extends State<RedeemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final redeemData = Provider.of<Redeems>(context, listen: true)
-        .getTodaysRedeem(officerId: _officerAccount!.id);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Redeem Voucher'),
@@ -294,13 +307,20 @@ class _RedeemScreenState extends State<RedeemScreen> {
           : Container(
               padding: EdgeInsets.all(medium),
               child: RefreshIndicator(
-                onRefresh: _fetchRedeemData,
-                child: ListView.builder(
-                  itemBuilder: (ctx, idx) {
-                    final redeem = redeemData[idx];
-                    return RedeemItem(redeem, redeemData.length - idx);
+                onRefresh: Provider.of<Redeems>(context, listen: false)
+                    .fetchAndSetRedeems,
+                child: Consumer<Redeems>(
+                  builder: (ctx, rdm, _) {
+                    final redeemData =
+                        rdm.getTodaysRedeem(officerId: _officerAccount!.id);
+                    return ListView.builder(
+                      itemBuilder: (ctx, idx) {
+                        final redeem = redeemData[idx];
+                        return RedeemItem(redeem, redeemData.length - idx);
+                      },
+                      itemCount: redeemData.length,
+                    );
                   },
-                  itemCount: redeemData.length,
                 ),
               ),
             ),

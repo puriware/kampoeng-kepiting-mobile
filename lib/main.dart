@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visitor/payment_screen.dart';
 import './screens/common/visit_detail_screen.dart';
 import './screens/common/welcome_screen.dart';
 import './screens/visitor/main_screen.dart';
@@ -76,6 +77,10 @@ class _MyAppState extends State<MyApp> {
         statusBarIconBrightness: Brightness.light,
       ),
     );
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     return MultiProvider(
       providers: [
@@ -261,6 +266,7 @@ class _MyAppState extends State<MyApp> {
           routes: {
             VisitEntryScreen.routeName: (ctx) => VisitEntryScreen(),
             VisitDetailScreen.routeName: (ctx) => VisitDetailScreen(),
+            PaymentScreen.routeName: (ctx) => PaymentScreen(),
           },
           onUnknownRoute: (settings) => MaterialPageRoute(
             builder: (ctx) => MainScreen(),

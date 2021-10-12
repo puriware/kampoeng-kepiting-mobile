@@ -90,7 +90,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           _authData['phone']!,
         );
       }
-      print(result);
+
       var loginResult = jsonDecode(result) as Map<String, dynamic>;
       var status = loginResult['status'];
       if (status != 'success') {
@@ -395,6 +395,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             onSaved: (value) {
                               _authData['password'] = value!;
                             },
+                            onFieldSubmitted: (_) => _submit(),
                           ),
                         ],
                       ),

@@ -25,33 +25,39 @@ class _VisitorScreenState extends State<VisitorScreen> {
   var _isInit = true;
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      _officerAccount = Provider.of<Auth>(context, listen: false).activeUser;
-      await Provider.of<Users>(context, listen: false).fetchAndSetUsers();
-      await _fetchVisitorData();
-      _isInit = false;
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  void initState() {
+    super.initState();
+    _officerAccount = Provider.of<Auth>(context, listen: false).activeUser;
   }
 
-  Future _fetchVisitorData() async {
-    setState(() {
-      _isLoading = true;
-    });
-    await Provider.of<Visits>(context, listen: false).fetchAndSetVisits(
-        //officerId: _officerAccount != null ? _officerAccount!.id : null,
-        );
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  // @override
+  // void didChangeDependencies() async {
+  //   super.didChangeDependencies();
+  //   if (_isInit) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     _officerAccount = Provider.of<Auth>(context, listen: false).activeUser;
+  //     await Provider.of<Users>(context, listen: false).fetchAndSetUsers();
+  //     await _fetchVisitorData();
+  //     _isInit = false;
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+  // }
+
+  // Future _fetchVisitorData() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   await Provider.of<Visits>(context, listen: false).fetchAndSetVisits(
+  //       //officerId: _officerAccount != null ? _officerAccount!.id : null,
+  //       );
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
 
   void _scan() async {
     await Permission.camera.request();
@@ -67,6 +73,7 @@ class _VisitorScreenState extends State<VisitorScreen> {
   _saveVisit(String? visitCode) async {
     if (visitCode != null && visitCode.isNotEmpty && _officerAccount != null) {
       try {
+        await Provider.of<Visits>(context, listen: false).fetchAndSetVisits();
         final visitData = Provider.of<Visits>(context, listen: false)
             .getVisitByCode(visitCode);
         if (visitData != null) {
@@ -98,62 +105,62 @@ class _VisitorScreenState extends State<VisitorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final visitData = Provider.of<Visits>(context)
-        .getTodaysVisit(officerId: _officerAccount!.id);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Visitor Data'),
         actions: [IconButton(onPressed: _scan, icon: Icon(CupertinoIcons.add))],
       ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container(
-              padding: EdgeInsets.all(medium),
-              child: RefreshIndicator(
-                onRefresh: _fetchVisitorData,
-                child: ListView.builder(
-                  itemBuilder: (ctx, idx) {
-                    final visit = visitData[idx];
-                    User? visitor = Provider.of<Users>(context, listen: false)
-                        .getUserById(visit.visitor);
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(large),
+      body: Container(
+        padding: EdgeInsets.all(medium),
+        child: RefreshIndicator(
+          onRefresh:
+              Provider.of<Visits>(context, listen: false).fetchAndSetVisits,
+          child: Consumer<Visits>(
+            builder: (ctx, vst, _) {
+              final visitData =
+                  vst.getTodaysVisit(officerId: _officerAccount!.id);
+              return ListView.builder(
+                itemBuilder: (ctx, idx) {
+                  final visit = visitData[idx];
+                  User? visitor = Provider.of<Users>(context, listen: false)
+                      .getUserById(visit.visitor);
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(large),
+                    ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: primaryBackgrounColor,
+                        child: Text((visitData.length - idx)
+                            .toString()), // Icon(Icons.qr_code),
                       ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: primaryBackgrounColor,
-                          child: Text((visitData.length - idx)
-                              .toString()), // Icon(Icons.qr_code),
-                        ),
-                        title: Text(
-                          visitor != null
-                              ? '${visitor.firstname} ${visitor.lastname}'
-                              : visit.region,
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        subtitle: Text(
-                          DateFormat('dd MMMM yyyy').format(visit.visitTime!),
-                        ),
-                        trailing: Text(
-                          DateFormat('HH:mm').format(visit.visitTime!),
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            VisitDetailScreen.routeName,
-                            arguments: visit.id,
-                          );
-                        },
+                      title: Text(
+                        visitor != null
+                            ? '${visitor.firstname} ${visitor.lastname}'
+                            : visit.region,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                    );
-                  },
-                  itemCount: visitData.length,
-                ),
-              ),
-            ),
+                      subtitle: Text(
+                        DateFormat('dd MMMM yyyy').format(visit.visitTime!),
+                      ),
+                      trailing: Text(
+                        DateFormat('HH:mm').format(visit.visitTime!),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          VisitDetailScreen.routeName,
+                          arguments: visit.id,
+                        );
+                      },
+                    ),
+                  );
+                },
+                itemCount: visitData.length,
+              );
+            },
+          ),
+        ),
+      ),
       // floatingActionButton: FloatingActionButton(
       //   child: Icon(CupertinoIcons.qrcode_viewfinder),
       //   onPressed: _scan,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kampoeng_kepiting_mobile/screens/visitor/payment_screen.dart';
+import 'package:nanoid/async.dart';
 import '../../models/order.dart';
 import '../../providers/auth.dart';
 import '../../providers/order_details.dart';
@@ -52,7 +54,7 @@ class ShopScreen extends StatelessWidget {
                   : 'Shopping Cart is Empty',
             ),
             Expanded(
-              child: CartList(cart.items),
+              child: CartList(),
             ),
           ],
         ),
@@ -93,6 +95,7 @@ class _OrderButtonState extends State<OrderButton> {
               });
               try {
                 final newOrder = Order(
+                  bookingCode: await nanoid(10),
                   idCustomer: userId,
                   total: cart.totalAmount,
                   disc: 0.0,
@@ -110,16 +113,20 @@ class _OrderButtonState extends State<OrderButton> {
                         .updateOrderDetail(cartItem);
                   });
                   //cart.clear();
-                  MessageDialog.showPopUpMessage(
+                  await MessageDialog.showPopUpMessage(
                     context,
                     'Order Success',
                     'Ticket order has been successful. Please proceed to the payment process.',
+                  );
+                  Navigator.of(context).pushNamed(
+                    PaymentScreen.routeName,
+                    arguments: newOrderID,
                   );
                 } else {
                   MessageDialog.showPopUpMessage(
                     context,
                     'Error',
-                    'Failed to process irder',
+                    'Failed to process order',
                   );
                 }
               } catch (err) {
