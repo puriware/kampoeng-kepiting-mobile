@@ -49,21 +49,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       _priceList = Provider.of<PriceLists>(context, listen: false)
           .getProductPriceByProductId(_productID);
       if (_product != null) _quantity = _product!.minOrder;
+      _price = _priceList.isNotEmpty ? _priceList[0].price : 0;
       _isInit = false;
     }
   }
 
-  double _getProductPrice(int order) {
-    var price = 0.0;
+  void _updateProductPrice(int order) {
     if (_priceList.isNotEmpty) {
       final result = _priceList.firstWhereOrNull((pl) =>
           pl.idProduct == _productID &&
           pl.orderType.toLowerCase() == _userType.toLowerCase() &&
           pl.minPax <= order &&
           pl.maxPax >= order);
-      price = result != null ? result.price : 0.0;
+
+      setState(() {
+        _price = result != null ? result.price : 0.0;
+      });
     }
-    return price;
   }
 
   @override
@@ -142,7 +144,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           currency.format(
-                            _getProductPrice(_quantity),
+                            _price,
                           ),
                           style: TextStyle(
                             color: primaryColor,
@@ -212,6 +214,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         if (_quantity > _product!.minOrder)
                                           setState(() {
                                             _quantity -= 1;
+                                            _updateProductPrice(_quantity);
                                           });
                                       },
                                       icon: Icon(
@@ -225,6 +228,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       onPressed: () {
                                         setState(() {
                                           _quantity += 1;
+                                          _updateProductPrice(_quantity);
                                         });
                                       },
                                       icon: Icon(

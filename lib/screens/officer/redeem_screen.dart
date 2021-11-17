@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kampoeng_kepiting_mobile/services/order_detail_api.dart';
 import '../../constants.dart';
 import '../../models/redeem.dart';
@@ -77,6 +78,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
     String visitorName,
     String totalVoucher,
     String voucherCode,
+    String schedule,
   ) async {
     final initialAvailableVoucher = ctrl.text;
     final initialValue = int.parse(initialAvailableVoucher);
@@ -108,10 +110,12 @@ class _RedeemScreenState extends State<RedeemScreen> {
                           Text('Product'),
                           Text('Quantity'),
                           Text('Remaining'),
+                          Text('Schedule'),
                         ],
                       ),
                       Column(
                         children: [
+                          Text(': '),
                           Text(': '),
                           Text(': '),
                           Text(': '),
@@ -136,6 +140,7 @@ class _RedeemScreenState extends State<RedeemScreen> {
                           ),
                           Text(totalVoucher),
                           Text(initialAvailableVoucher),
+                          Text(schedule),
                         ],
                       ),
                     ],
@@ -250,6 +255,9 @@ class _RedeemScreenState extends State<RedeemScreen> {
             '${visitor!.firstname} ${visitor.lastname}',
             order.quantity.toString(),
             voucherCode,
+            order.dateTimeSchedule != null
+                ? DateFormat('dd MMMM yyyy').format(order.dateTimeSchedule!)
+                : 'None',
           );
           if (_ctrlRedeemVoucher.text.isNotEmpty && _officerAccount != null) {
             final quantity = int.parse(_ctrlRedeemVoucher.text.trim());
@@ -290,12 +298,12 @@ class _RedeemScreenState extends State<RedeemScreen> {
       appBar: AppBar(
         title: Text('Redeem Voucher'),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.refresh_rounded,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Icon(
+          //     Icons.refresh_rounded,
+          //   ),
+          // ),
           IconButton(
             onPressed: _scan,
             icon: Icon(

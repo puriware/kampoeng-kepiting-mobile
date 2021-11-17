@@ -102,7 +102,7 @@ class MessageDialog {
                       large,
                     ),
                   ),
-                  color: primaryColor,
+                  color: primaryDarkerColor,
                 ),
                 child: Text(
                   qrContent,
