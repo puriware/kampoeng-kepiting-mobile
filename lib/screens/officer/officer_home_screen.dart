@@ -15,8 +15,9 @@ class OfficerHomeScreen extends StatelessWidget {
         Provider.of<Visits>(context).thisWeekTotalVisit;
     final lastWeekTotalVisitor =
         Provider.of<Visits>(context, listen: false).prevWeekTotalVisit;
-    final percentageFromLastWeek =
-        thisWeekTotalVisitor / lastWeekTotalVisitor * 100;
+    final percentageFromLastWeek = thisWeekTotalVisitor /
+        (lastWeekTotalVisitor > 0 ? lastWeekTotalVisitor : 1) *
+        100;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -96,6 +97,7 @@ class OfficerHomeScreen extends StatelessWidget {
   RichText buildInfoTextWithPercentage(
       {required String title, required String percentage}) {
     return RichText(
+      textAlign: TextAlign.center,
       text: TextSpan(
         children: [
           TextSpan(

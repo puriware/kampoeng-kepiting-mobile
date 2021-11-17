@@ -12,6 +12,8 @@ class OrderDetail {
   String? note;
   String? voucherCode;
   int remaining;
+  DateTime? dateTimeSchedule;
+  String? remark;
   DateTime? created;
   DateTime? updated;
 
@@ -27,6 +29,8 @@ class OrderDetail {
     this.note,
     this.voucherCode,
     this.remaining = 0,
+    this.dateTimeSchedule,
+    this.remark,
     this.created,
     this.updated,
   });
@@ -44,6 +48,10 @@ class OrderDetail {
       note: map["note"],
       voucherCode: map["voucherCode"],
       remaining: map["remaining"],
+      dateTimeSchedule: map["datetimeschedule"] != null
+          ? DateTime.parse(map["datetimeschedule"].toString())
+          : null,
+      remark: map['remark'],
       created: map["created"] != null
           ? DateTime.parse(map["created"].toString())
           : null,
@@ -66,6 +74,9 @@ class OrderDetail {
       "note": note,
       "voucherCode": voucherCode,
       "remaining": remaining,
+      "datetimeschedule":
+          dateTimeSchedule != null ? dateTimeSchedule!.toIso8601String() : null,
+      "remark": remark,
       "created": created != null ? created!.toIso8601String() : null,
       "updated": updated != null ? updated!.toIso8601String() : null,
     };
@@ -73,7 +84,7 @@ class OrderDetail {
 
   @override
   String toString() {
-    return 'OrderDetail{id: $id, userId: $userId, orderId: $orderId, id_product: $idProduct, orderType: $orderType, quantity: $quantity, price: $price, visitDate: $visitDate, note: $note, voucherCode: $voucherCode, remaining: $remaining, created: $created, updated: $updated}';
+    return 'OrderDetail{id: $id, userId: $userId, orderId: $orderId, id_product: $idProduct, orderType: $orderType, quantity: $quantity, price: $price, visitDate: $visitDate, note: $note, voucherCode: $voucherCode, remaining: $remaining, datetimeschedule: $dateTimeSchedule, remark: $remark, created: $created, updated: $updated}';
   }
 
   static List<OrderDetail> orderDetailFromJson(String jsonData) {

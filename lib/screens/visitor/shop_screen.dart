@@ -100,7 +100,7 @@ class _OrderButtonState extends State<OrderButton> {
                   total: cart.totalAmount,
                   disc: 0.0,
                   grandTotal: cart.totalAmount,
-                  status: 'Belum Dibayar',
+                  status: 'Perlu Verifikasi',
                   created: DateTime.now(),
                 );
                 final newOrderID =

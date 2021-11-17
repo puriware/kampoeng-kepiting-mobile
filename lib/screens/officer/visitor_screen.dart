@@ -22,7 +22,6 @@ class VisitorScreen extends StatefulWidget {
 class _VisitorScreenState extends State<VisitorScreen> {
   User? _officerAccount;
   var _isLoading = false;
-  var _isInit = true;
 
   @override
   void initState() {
@@ -72,6 +71,9 @@ class _VisitorScreenState extends State<VisitorScreen> {
 
   _saveVisit(String? visitCode) async {
     if (visitCode != null && visitCode.isNotEmpty && _officerAccount != null) {
+      setState(() {
+        _isLoading = true;
+      });
       try {
         await Provider.of<Visits>(context, listen: false).fetchAndSetVisits();
         final visitData = Provider.of<Visits>(context, listen: false)
@@ -99,6 +101,10 @@ class _VisitorScreenState extends State<VisitorScreen> {
           "Error",
           err.toString(),
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -110,57 +116,61 @@ class _VisitorScreenState extends State<VisitorScreen> {
         title: Text('Visitor Data'),
         actions: [IconButton(onPressed: _scan, icon: Icon(CupertinoIcons.add))],
       ),
-      body: Container(
-        padding: EdgeInsets.all(medium),
-        child: RefreshIndicator(
-          onRefresh:
-              Provider.of<Visits>(context, listen: false).fetchAndSetVisits,
-          child: Consumer<Visits>(
-            builder: (ctx, vst, _) {
-              final visitData =
-                  vst.getTodaysVisit(officerId: _officerAccount!.id);
-              return ListView.builder(
-                itemBuilder: (ctx, idx) {
-                  final visit = visitData[idx];
-                  User? visitor = Provider.of<Users>(context, listen: false)
-                      .getUserById(visit.visitor);
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(large),
-                    ),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: primaryBackgrounColor,
-                        child: Text((visitData.length - idx)
-                            .toString()), // Icon(Icons.qr_code),
-                      ),
-                      title: Text(
-                        visitor != null
-                            ? '${visitor.firstname} ${visitor.lastname}'
-                            : visit.region,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      subtitle: Text(
-                        DateFormat('dd MMMM yyyy').format(visit.visitTime!),
-                      ),
-                      trailing: Text(
-                        DateFormat('HH:mm').format(visit.visitTime!),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          VisitDetailScreen.routeName,
-                          arguments: visit.id,
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              padding: EdgeInsets.all(medium),
+              child: RefreshIndicator(
+                onRefresh: Provider.of<Visits>(context, listen: false)
+                    .fetchAndSetVisits,
+                child: Consumer<Visits>(
+                  builder: (ctx, vst, _) {
+                    final visitData =
+                        vst.getTodaysVisit(officerId: _officerAccount!.id);
+                    return ListView.builder(
+                      itemBuilder: (ctx, idx) {
+                        final visit = visitData[idx];
+                        User? visitor =
+                            Provider.of<Users>(context, listen: false)
+                                .getUserById(visit.visitor);
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(large),
+                          ),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: primaryBackgrounColor,
+                              child: Text((visitData.length - idx)
+                                  .toString()), // Icon(Icons.qr_code),
+                            ),
+                            title: Text(
+                              visitor != null
+                                  ? '${visitor.firstname} ${visitor.lastname}'
+                                  : visit.region,
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
+                            subtitle: Text(
+                              DateFormat('dd MMMM yyyy')
+                                  .format(visit.visitTime!),
+                            ),
+                            trailing: Text(
+                              DateFormat('HH:mm').format(visit.visitTime!),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                VisitDetailScreen.routeName,
+                                arguments: visit.id,
+                              );
+                            },
+                          ),
                         );
                       },
-                    ),
-                  );
-                },
-                itemCount: visitData.length,
-              );
-            },
-          ),
-        ),
-      ),
+                      itemCount: visitData.length,
+                    );
+                  },
+                ),
+              ),
+            ),
       // floatingActionButton: FloatingActionButton(
       //   child: Icon(CupertinoIcons.qrcode_viewfinder),
       //   onPressed: _scan,

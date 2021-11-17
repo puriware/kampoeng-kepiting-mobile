@@ -26,11 +26,8 @@ class _OrderItemState extends State<OrderItem> {
         : widget.order.total;
     final orderDetails = Provider.of<OrderDetails>(context, listen: false)
         .getOrderDetailByOrderId(widget.order.id);
-    final orderStatus = widget.order.bankName != null
-        ? widget.order.status.contains('Belum')
-            ? 'Menunggu Verifikasi'
-            : widget.order.status
-        : widget.order.status;
+    final orderStatus =
+        widget.order.bankName != null ? widget.order.status : "Belum Bayar";
     return InkWell(
       onTap: widget.order.bankName == null || widget.order.bankName!.isEmpty
           ? () {

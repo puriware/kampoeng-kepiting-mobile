@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
-
 import 'package:kampoeng_kepiting_mobile/constants.dart';
 import 'package:kampoeng_kepiting_mobile/models/product.dart';
 import 'package:kampoeng_kepiting_mobile/providers/order_details.dart';
@@ -82,8 +79,16 @@ class VoucherItem extends StatelessWidget {
                               children: [
                                 Text(
                                     '${_orderDetail.remaining} from ${_orderDetail.quantity} voucher available'),
+                                // Text(
+                                //   'Voucher Code: ${_orderDetail.voucherCode.toString()}',
+                                //   style: TextStyle(
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
                                 Text(
-                                  'Voucher Code: ${_orderDetail.voucherCode.toString()}',
+                                  _orderDetail.dateTimeSchedule != null
+                                      ? 'Schedule: ${DateFormat('dd MMMM yyyy').format(_orderDetail.dateTimeSchedule!)}'
+                                      : 'Voucher Code: ${_orderDetail.voucherCode.toString()}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -102,13 +107,10 @@ class VoucherItem extends StatelessWidget {
                     child: _orderDetail.remaining > 0
                         ? IconButton(
                             onPressed: () async {
-                              Uint8List qrcode = await scanner.generateBarCode(
-                                _orderDetail.voucherCode.toString(),
-                              );
                               await MessageDialog.showQrDialog(
                                 context,
                                 "Voucher QR Code",
-                                qrcode,
+                                _orderDetail.voucherCode.toString(),
                               );
                               await Provider.of<OrderDetails>(context,
                                       listen: false)

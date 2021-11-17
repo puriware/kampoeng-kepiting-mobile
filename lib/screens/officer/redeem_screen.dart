@@ -5,7 +5,6 @@ import '../../constants.dart';
 import '../../models/redeem.dart';
 import '../../models/user.dart';
 import '../../providers/auth.dart';
-import '../../providers/order_details.dart';
 import '../../providers/products.dart';
 import '../../providers/redeems.dart';
 import '../../providers/users.dart';
@@ -26,7 +25,6 @@ class _RedeemScreenState extends State<RedeemScreen> {
   User? _officerAccount;
   TextEditingController _ctrlRedeemVoucher = TextEditingController();
   var _isLoading = false;
-  var _isInit = true;
 
   @override
   void initState() {
@@ -292,6 +290,12 @@ class _RedeemScreenState extends State<RedeemScreen> {
       appBar: AppBar(
         title: Text('Redeem Voucher'),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.refresh_rounded,
+            ),
+          ),
           IconButton(
             onPressed: _scan,
             icon: Icon(

@@ -1,17 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kampoeng_kepiting_mobile/models/province.dart';
-import 'package:kampoeng_kepiting_mobile/providers/districts.dart';
-import 'package:kampoeng_kepiting_mobile/providers/provinces.dart';
 import 'package:kampoeng_kepiting_mobile/providers/regencies.dart';
 import '../../constants.dart';
 import '../../providers/visits.dart';
 import '../../screens/common/visit_detail_screen.dart';
 import '../../widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 
 class VisitItem extends StatelessWidget {
   final int visitId;
@@ -56,12 +49,10 @@ class VisitItem extends StatelessWidget {
                   createdDate.isAtSameMomentAs(today) && visit.visitTime == null
                       ? IconButton(
                           onPressed: () async {
-                            Uint8List qrcode =
-                                await scanner.generateBarCode(visit.visitCode);
                             await MessageDialog.showQrDialog(
                               context,
                               "Visit QR Code",
-                              qrcode,
+                              visit.visitCode.toString(),
                             );
                             await Provider.of<Visits>(context, listen: false)
                                 .fetchVisitById(visitId);
